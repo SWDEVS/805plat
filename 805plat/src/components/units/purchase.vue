@@ -19,7 +19,9 @@
       </div>
       <div class="list-block">
         <div class="purchase-item" v-for="item in payitem.list" :key="item.id">
-          <div class="item-icon"></div>
+          <div class="item-icon">
+            <img :src="item.icon"/>
+          </div>
           <div class="item-bean">{{item.ingot | formatNumberRgx}}金豆</div>
           <div class="item-amount" @click="createorder(item.id)">
             <button class="btn-purchase">￥{{item.money}}</button>
@@ -245,8 +247,11 @@ export default {
         .item-icon {
           width: 60px;
           height: 60px;
-          background: url('assets/images/ingot.png') no-repeat;
-          background-size: 100%;
+          // background: url('assets/images/ingot.png') no-repeat;
+          // background-size: 100%;
+          img{
+            width:100%;
+          }
         }
 
         .item-bean {

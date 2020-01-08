@@ -2,7 +2,7 @@
     <!-- 店铺列表 -->
     
     <div class="shop_list">
-        <div class="shop_coupon" v-for="(item,index) in shopList" :key="item.ditch_num" @click="toShopdetail(item.ditch_num)">
+        <div class="shop_coupon" v-for="item in shopList" :key="item.ditch_num" @click="toShopdetail(item.ditch_num)">
             <div class="shop_l">
                 <img :src="item.small_pic">
             </div>
@@ -17,7 +17,7 @@
                     <span>已兑{{item.use_num}}</span>
                 </div>
                 <div class="coupons">
-                    <div class="box ellipsis" v-for="(int,ind) in item.coups">{{int.coup_name}}</div>
+                    <div class="box ellipsis" v-for="(int,ind) in item.coups" :key="ind">{{int.coup_name}}</div>
                 </div>
             </div>
             <div class="angle">
@@ -116,7 +116,9 @@ export default {
 				font-size: 26px;
 				color: #555;
 				width: 350px;
-				margin-bottom: 9px;
+				height 30px;
+				line-height 30px;
+				margin-bottom: 5px;
 			}
 			.shop_address{
 				i{
@@ -133,6 +135,8 @@ export default {
 				span{
 					display: block;
 					width: 380px;
+					height 29px;
+					line-height 29px;
 					font-size: 24px;
 					color: #838383;
 				}

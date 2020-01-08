@@ -235,7 +235,7 @@ export default {
 				font-size: $size-xs;
 				color: $color-deep;
 				margin-right: 20px;
-				white-space: normal;
+				white-space: nowrap;
 			}
 			.set_c{
 				flex: 1;

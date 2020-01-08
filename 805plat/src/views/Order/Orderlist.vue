@@ -175,7 +175,10 @@ export default {
     },
     gorewards() {
       this.$router.push({
-        name: "Rewards"
+        name: "Rewards",
+        query:{
+          isjump:1
+        }
       });
     }
   }
