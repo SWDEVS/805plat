@@ -58,7 +58,7 @@
         </div>
       </div>
     </Xcont>
-    <Purchase :showpurchase="showpurchase"></Purchase>
+    <Purchase :showpurchase="showpurchase" @freshlist="freshlist"></Purchase>
   </div>
 </template>
 <script>
@@ -179,6 +179,17 @@ export default {
           this.$refs.pay[0].forceUpdate(false);
         }
       }
+    },
+    async freshlist(msg) {
+      this.toast = this.$createToast({
+        txt: msg,
+        type: "txt"
+      });
+      this.toast.show();
+      this.incomepage = 1;
+      this.tabs[0].list.length = 0;
+      let incomelist =await this.getincomelist(); //刷新列表
+      this.tabs[0].list = incomelist.list;     
     }
   }
 };

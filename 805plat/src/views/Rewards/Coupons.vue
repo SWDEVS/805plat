@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="angle">
-                <span>￥{{item.price}}</br>省</span>
+                <span><p>￥{{item.price}}</p><p>省</p></span>
             </div>
         </div>
     </div>

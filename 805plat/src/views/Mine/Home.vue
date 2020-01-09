@@ -17,7 +17,7 @@
             <div class="title">已为我节省</div>
             <div class="num">
               <span>￥</span>
-              {{userinfo.charm | fmoney}}
+              {{userinfo.coup_price | fmoney}}
             </div>
           </div>
           <div class="bottom-block">

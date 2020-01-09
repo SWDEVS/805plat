@@ -38,7 +38,10 @@
               </div>
               <div class="row-item">{{item.total_ingot|formatNumberRgx}}</div>
               <!-- <div class="row-item">{{item.mg_charm|formatNumberRgx}}</div> -->
-              <div class="row-item" :class="item.pay_status=='2'?'txt-success':item.pay_status=='3'?'txt-danger':''">{{item.pay_status|formatstatus}}</div>
+              <div
+                class="row-item"
+                :class="item.pay_status=='2'?'txt-success':item.pay_status=='3'?'txt-danger':''"
+              >{{item.pay_status|formatstatus}}</div>
               <div class="row-item">{{item.create_time}}</div>
             </div>
           </template>
@@ -46,7 +49,7 @@
         </div>
       </div>
     </Xcont>
-    <Purchase :showpurchase="showpurchase"></Purchase>
+    <Purchase :showpurchase="showpurchase" @freshlist="freshlist"></Purchase>
   </div>
 </template>
 <script>
@@ -72,14 +75,6 @@ export default {
       page: 1,
       tip: "最近暂无充值记录~",
       purchaselist: [
-        // {
-        //   order_no: 123,
-        //   money: 99,
-        //   mg_bean: 9900000,
-        //   mg_charm: 9900,
-        //   result_status: 1,
-        //   create_time: "12.27 13:34"
-        // }
       ]
     };
   },
@@ -103,7 +98,7 @@ export default {
       };
       let purchaselist = await this.$get(this.$api.getpurchaselist, param);
       console.log(purchaselist);
-      this.purchaselist = purchaselist.pay_list;
+      this.purchaselist = this.purchaselist.concat(purchaselist.pay_list);
       this.page += 1;
     },
     godetail(orderno) {
@@ -113,6 +108,16 @@ export default {
           orderno
         }
       });
+    },
+    freshlist(msg) {
+      this.toast = this.$createToast({
+        txt: msg,
+        type: "txt"
+      });
+      this.toast.show();
+      this.page = 1;
+      this.purchaselist.length = 0;
+      this.getpurchaselist();//刷新列表
     }
   }
 };
@@ -187,7 +192,7 @@ export default {
     border-bottom: 1px solid $color-regular-blue;
 
     .head-item {
-      text-align center;
+      text-align: center;
       flex: 1;
     }
 
@@ -211,14 +216,15 @@ export default {
     justify-content: space-between;
     font-size: $size-s;
     color: $color-shallow;
-    border-bottom 1px solid $color-border
+    border-bottom: 1px solid $color-border;
 
     .row-item {
       flex: 1;
       text-align: center;
       white-space: nowrap;
-      .iconfont{
-        color: $color-regular-blue
+
+      .iconfont {
+        color: $color-regular-blue;
       }
     }
 

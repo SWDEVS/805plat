@@ -20,7 +20,7 @@
       <div class="list-block">
         <div class="purchase-item" v-for="item in payitem.list" :key="item.id">
           <div class="item-icon">
-            <img :src="item.icon"/>
+            <img :src="item.icon" />
           </div>
           <div class="item-bean">{{item.ingot | formatNumberRgx}}金豆</div>
           <div class="item-amount" @click="createorder(item.id)">
@@ -43,7 +43,7 @@ export default {
   },
   created() {
     this.getpayitem();
-    
+
     this.wxstart();
   },
   computed: {
@@ -74,7 +74,6 @@ export default {
       });
     },
     async createorder(product_id) {
-      
       let param = {
         pay_num: 1,
         pay_type: 3,
@@ -87,12 +86,12 @@ export default {
       });
       if (orderconfig.data.jsApiParameters) {
         orderconfig = orderconfig.data.jsApiParameters;
-      }else{
+      } else {
         this.toast = this.$createToast({
-			        txt: '订单创建失败',
-			        type: 'txt'
-			    })
-			    this.toast.show();
+          txt: "订单创建失败",
+          type: "txt"
+        });
+        this.toast.show();
       }
 
       this.$wx.invoke(
@@ -101,14 +100,24 @@ export default {
           appId: orderconfig.appId, //公众号名称，由商户传入
           timeStamp: orderconfig.timeStamp, //时间戳，自1970年以来的秒数
           nonceStr: orderconfig.nonceStr, //随机串
-          package: orderconfig.packAge,
-          signType: "MD5", //微信签名方式
-          paySign: orderconfig.signType //微信签名
+          package: orderconfig.package,
+          signType: orderconfig.signType, //微信签名方式
+          paySign: orderconfig.paySign //微信签名
         },
-        function(res) {
+      async function(res) {
           var a = JSON.stringify(res);
           if (res.err_msg == "get_brand_wcpay_request:ok") {
+            this.$store.dispatch("_showPurchase", false);
+            this.$emit("freshlist", "充值成功");
+            //更新金豆数量
+            let userinfo =await this.$post(this.$api.getuserinfo, {});
+            let baseinfo = {
+              ingot: userinfo.ingot,
+              ticket: userinfo.ticket
+            };
+            this.$store.dispatch("_currentBaseinfo", baseinfo);
           } else {
+            this.$emit("freshlist", res.err_msg);
           } // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
         }
       );
@@ -247,10 +256,11 @@ export default {
         .item-icon {
           width: 60px;
           height: 60px;
+
           // background: url('assets/images/ingot.png') no-repeat;
           // background-size: 100%;
-          img{
-            width:100%;
+          img {
+            width: 100%;
           }
         }
 

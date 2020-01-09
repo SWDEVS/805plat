@@ -6,7 +6,7 @@
     		<div class="box">
     			<cube-input v-model="phone" placeholder="请输入手机号码" type="number" :maxlength="11"></cube-input>
     		</div>
-    		<p class="tip">此次抽奖将花费"<span>{{use_num | formatNumberRgx}}积分</span>"</p>
+    		<p class="tip">此次兑换将花费"<span>{{use_num | formatNumberRgx}}积分</span>"</p>
 			<div class="btn">
 				<cube-button :primary="true" @click="changeGoods()">确 定</cube-button>
 			</div>

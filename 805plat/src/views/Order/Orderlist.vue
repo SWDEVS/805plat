@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="btn-block" v-show="selectedLabel=='领奖'">
-        <cube-button class="btn-primary" :primary="true" @click="gorewards">开始抽奖</cube-button>
+        <cube-button class="btn-primary" :primary="true" @click="gorewards">开始兑换</cube-button>
       </div>
     </Xcont>
   </div>

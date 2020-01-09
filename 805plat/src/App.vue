@@ -31,6 +31,7 @@ export default {
       let url = window.location.href;
 
       let token = this.$route.query.token;
+      //localStorage.setItem("vuex",'{"user":{"token":"489068c86e2f3f8abb54c91b9eeca5d4"}}');
       let vuexstorage = localStorage.getItem("vuex");
 
       let currentUser = "";
@@ -53,7 +54,7 @@ export default {
     }
   },
   created() {
-    this.wxstart();
+    //this.wxstart();
   },
   computed: {
     ...mapState({

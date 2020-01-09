@@ -25,11 +25,11 @@
 	    		<div class="line"></div>
 	    		<p class="introduce">商品介绍</p>
 	    		<div class="text" v-html="goods_detail.goods_desc"></div>
-	    		<p class="introduce">抽奖说明</p>
+	    		<p class="introduce">兑换说明</p>
 	    		<div class="text" v-html="goods_detail.global_value"></div>
 	    		<!-- 按钮 -->
 				<div class="btn" @click="luckyDraw()">
-					<cube-button :primary="true">开始抽奖</cube-button>
+					<cube-button :primary="true">开始兑换</cube-button>
 				</div>
 	    	</div>
 	    	<cubePop :infomation="info" ref="extendPopup"></cubePop>
@@ -91,7 +91,7 @@
 				        icon: 'cubeic-right',
 				        showClose: true,
 				        title: "提示",
-				        content: `抽奖将花费"${this.goods_detail.use_num}积分"`,
+				        content: `兑换将花费"${this.goods_detail.use_num}积分"`,
 				        onConfirm: () => {
 				        	this.confirmGoods();
 				        }
@@ -115,7 +115,7 @@
 					this.$refs.extendPopup.show();
 				}
 			},
-			luckyDraw:function(){//抽奖
+			luckyDraw:function(){//兑换
 				if(!this.getuserbaseinfo()) return false;
 				this.isCheck();
 			}
