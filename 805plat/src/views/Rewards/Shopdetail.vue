@@ -125,16 +125,43 @@ export default {
         	coupid: id
         });
         if (res && res._status == '200'){
-        	this.$createDialog({
-		        type: 'alert',
-		        icon: 'cubeic-right',
-		        showClose: true,
-		        title: '领取成功',
-		        content:'是否前往优惠券列表查看?',
-		        onConfirm: () => {
-		        	this.$router.push('/mine/Coupon');
-		        }
-		     }).show()
+        	if(res.pay_money && res.pay_money != ''){
+        		 this.$createDialog({
+			        type: 'confirm',
+			        icon: 'cubeic-info',
+			        title: '积分不足',
+			        content: `您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,
+			        confirmBtn: {
+			          text: '确定',
+			          active: true,
+			          disabled: false,
+			          href: 'javascript:;'
+			        },
+			        cancelBtn: {
+			          text: '取消',
+			          active: false,
+			          disabled: false,
+			          href: 'javascript:;'
+			        },
+			        onConfirm: () => {
+			          
+			        },
+			        onCancel: () => {
+			         
+			        }
+			      }).show()
+        	}else{
+        		this.$createDialog({
+			        type: 'alert',
+			        icon: 'cubeic-right',
+			        showClose: true,
+			        title: '领取成功',
+			        content:'是否前往优惠券列表查看?',
+			        onConfirm: () => {
+			        	this.$router.push('/mine/Coupon');
+			        }
+			     }).show()
+        	}
         }
     },
     line2br:function(text) {
