@@ -5,68 +5,74 @@
 			<div class="content">
 				<div class="title">
 					<div class="head">
-						<img src="../../assets/images/ingot.png">
-						<span>用户昵称</span>
+						<img :src="userInfo.face_src">
+						<span>{{userInfo.nick_name}}</span>
 					</div>
-					<div class="box">
-						<span class="name">元宝</span>
+					<div class="box" @click="navigate('/mine/bean')">
+						<!-- <span class="name">金豆</span> -->
 						<i class="yuan"></i>
-						<span class="num">99999</span>
+						<span class="num">{{userInfo.ingot|formatNumberRgx}}</span>
 						<i class="right"></i>
 					</div>
-					<div class="box">
-						<span class="name">积分</span>
+					<div class="box" @click="navigate('/mine/point')">
+						<!-- <span class="name">积分</span> -->
 						<i class="point"></i>
-						<span class="num">99999</span>
+						<span class="num">{{userInfo.ticket|formatNumberRgx}}</span>
 						<i class="right"></i>
 					</div>
 				</div>
 				<div class="banner">
-					<p class="sign">连续签到3天</p>
+					<p class="sign">连续签到{{sign_day}}天</p>
 					<p class="tips">忘记签到会重新开始哦~</p>
 					<div class="days">
-						<div class="day_box" v-for="item in 7">
+						<div class="day_box" v-for="(item,index) in sign_list" :key="item.sign">
 							<div class="day_t">
-								<span>翻倍</span>
+								<div class="double" v-if="item.content != ''">
+									<span>{{item.content}}</span>
+								</div>
 							</div>
 							<div class="day_c">
-								<p class="num">18</p>
+								<p :class="[item.status == 1 ? 'active':'','num']">{{item.send_num}}</p>
 								<div class="reward">
-									<i class="finished"></i>
+									<i class="finished" v-if="item.status == 1"></i>
+									<i :class="bindCladdName[item.send_type]" v-else-if="item.status == 2" @click="sign(item.sign)"></i>
+									<i :class="bindCladdName[item.send_type]" v-else></i>
 								</div>
 							</div>
 							<div class="day_b">
-								<p>1天</p>
+								<p :class="[item.status == 1 ? 'active':'']">{{item.sign}}天</p>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="fish"></div>
+				<div class="fish" @click="toFish()"></div>
 				<div class="task">
 					<i></i>
 					<span>日常任务</span>
 				</div>
-				<div class="task_list">
+				<div class="task_list" v-for="(item,index) in activelist" :key="item.id">
 					<div class="task_l">
 						<img src="@/assets/images/Gold/jb_icon_fenxiang.png">
 					</div>
 					<div class="task_c">
 						<div class="task_title">
-							<span>分享满贯捕鱼体验版</span>
+							<span class="ellipsis">{{item.content}}</span>
 							<div class="reward">
-								<i class="point"></i>
-								<p class="num">+888</p>
+								<i :class="bindCladdName[item.send_type]"></i>
+								<p class="num">+{{item.send_num}}</p>
 							</div>
 						</div>
 						<div class="progress">
 							<div class="tip">
-								<i v-bind:style="{width: health+'%'}"></i>
+								<i v-bind:style="{width: GetPercent(item.res_num,item.need_num)+'%'}"></i>
 							</div>
-							<p><span>0</span>/1</p>
+							<p><span>{{item.res_num}}</span>/{{item.need_num}}</p>
 						</div>
 					</div>
 					<div class="task_r">
-						<a href="javascript:;" class="recive"></a>
+						<a href="javascript:;" class="complete" @click="share()" v-if="item.status == 0"></a>
+						<a href="javascript:;" class="recive" @click="receiveActive(item.id)" v-if="item.status == 1"></a>
+						<a href="javascript:;" class="finished" v-if="item.status == 2"></a>
 					</div>
 				</div>
 			</div>
@@ -80,8 +86,16 @@
 		name:"",
 		data(){
 			return {
-				health: 90
-
+				health: 0,
+				userInfo:"",//个人信息
+				sign_day: 0,//签到的第几天
+				sign_list:[],//签到列表
+				bindCladdName:{
+					1: 'yuan',
+					2: 'point',
+					3: 'ticket'
+				},
+				activelist:[],//任务列表
 			}
 		},
 		components: {
@@ -89,10 +103,107 @@
 			Xcont
 		},
 		methods:{
-
+			async getuserinfo(){
+				let res = await this.$post(this.$api.getuserinfo, "");
+				if (res && res._status == '200') {
+					this.userInfo = res;
+				}
+			},
+			navigate:function(path) {
+		      	this.$router.push(path);
+		    },
+		    async getsignlist(){
+				let res = await this.$post(this.$api.getsignlist, "");
+				if (res && res._status == '200') {
+					this.sign_day = res.con_signe_days;
+					this.sign_list = res.sign_config;
+				}
+			},
+			async sign(id){
+				let res = await this.$post(this.$api.sign, {
+					id: id
+				});
+				if (res && res._status == '200') {
+					this.$createDialog({
+				        type: 'alert',
+				        icon: 'cubeic-right',
+				        showClose: true,
+				        title: '提示',
+				        content:'签到成功',
+				        onConfirm: () => {}
+				     }).show()
+					this.getuserinfo();
+					this.getsignlist();
+				}
+			},
+			toFish:function(){
+				window.location.href = "https://www.chengzijianzhan.com/tetris/page/6766529259344232462/";
+			},
+			async getActivelist(){
+				let res = await this.$post(this.$api.activelist, "");
+				if (res && res._status == '200') {
+					this.activelist = res.list;
+				}
+			},
+			GetPercent:function(num, total) {
+			    num = parseFloat(num);
+			    total = parseFloat(total);
+			    if (isNaN(num) || isNaN(total)) {
+			        return "0";
+			    }
+			    return total <= 0 ? 0 : (Math.round(num / total * 10000) / 100.00);
+			},
+			async wxstart() {
+		        let config = await this.$get(this.$api.getwxconfig, {
+		          url: window.location.href
+		        });
+		        this.$wx.config({
+		          beta: true,
+		          debug: false,
+		          appId: config.appid,
+		          timestamp: config.timestamp,
+		          nonceStr: config.nonceStr,
+		          signature: config.signature,
+		          jsApiList: ["updateAppMessageShareData","updateTimelineShareData"]
+		        });
+		    },
+		    share:function(){
+		    	console.log(this.$wx)
+			    this.$wx.updateAppMessageShareData({ 
+			      title: '1111', // 分享标题
+			      desc: '1111', // 分享描述
+			      link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+			      imgUrl: '', // 分享图标
+			      success: function () {// 设置成功
+			      	this.share();
+			      }
+			    })
+		    },
+		    async share() {
+		        let config = await this.$get(this.$api.share, "");
+		    },
+		    async receiveActive(id){
+		    	let res = await this.$get(this.$api.receiveActive, {
+		    		id:id
+		    	});
+		    	if (res && res._status == '200') {
+					this.$createDialog({
+				        type: 'alert',
+				        icon: 'cubeic-right',
+				        showClose: true,
+				        title: '提示',
+				        content:'领取成功',
+				        onConfirm: () => {}
+				     }).show();
+					this.getActivelist();
+				}
+		    }
 		},
 		created(){
-
+			this.getuserinfo();
+			this.getsignlist();
+			this.getActivelist();
+			this.wxstart();
 		},
 		mounted(){
 
@@ -191,17 +302,21 @@
 				.day_t{
 					width: 70px;
 					height: 39px;
-					background: url('assets/images/Gold/jb_qipao.png') no-repeat;	
-					background-size: 100% 100%;
 					margin: 0 auto;
 					margin-bottom: 10px;
-					span{
-						display: block;
-						height: 30px;
-						text-align: center;
-						line-height: 30px;
-						color: #fff;
-						font-size: 20px;
+					.double{
+						width: 100%;
+						height: 100%;
+						background: url('assets/images/Gold/jb_qipao.png') no-repeat;
+						background-size: 100% 100%;
+						span{
+							display: block;
+							height: 30px;
+							text-align: center;
+							line-height: 30px;
+							color: #fff;
+							font-size: 20px;
+						}
 					}
 				}
 				.day_c{
@@ -214,8 +329,11 @@
 					margin-bottom: 11px;
 					.num{
 						font-size: 22px;
-						color: #acacac;
+						color: #5f5f5f;
 						margin-bottom: 11px;
+					}
+					.active{
+						color: #acacac;
 					}
 					.reward{
 						height: 45px;
@@ -257,6 +375,9 @@
 					text-align: center;
 					p{
 						font-size: 22px;
+						color: #5f5f5f;
+					}
+					.active{
 						color: #acacac;
 					}
 				}
@@ -314,6 +435,8 @@
 					font-size: 24px;
 					color: #5f5f5f;
 					margin-right: 14px;
+					display: block;
+					width: 230px;
 				}
 				.reward{
 					width: 120px;
@@ -323,6 +446,13 @@
 					display: flex;
 					align-items: center;
 					justify-content: space-around;
+					.yuan{
+						display: block;
+						width: 27px;
+						height: 24px;
+						background: url('assets/images/Gold/jb_icon_yb_s.png') no-repeat;
+						background-size: 100% 100%;	
+					}
 					.point{
 						display: block;
 						width: 28px;

@@ -27,7 +27,12 @@ const api = {
     getpurchaselist:baseUrl+"/gameuser/paywaterlist",//获取充值记录列表
     getpurchasedetail:baseUrl+"/gameuser/paywaterinfo",//获取充值订单详情
     getorderlist:baseUrl+"/gameuser/ajaxexchangelist",//获取订单列表
-    getorderdetail:baseUrl+"/gameuser/exchangedetail"
+    getorderdetail:baseUrl+"/gameuser/exchangedetail",
+    getsignlist:baseUrl+"/gameuser/signlist",//签到列表
+    sign:baseUrl+"/gameuser/sign",//签到列表
+    activelist:baseUrl+"/gameuser/activelist",//日常任务列表
+    share:baseUrl+"/gameuser/Share",//日常任务列表
+    receiveActive:baseUrl+"/gameuser/ReceiveActive",//日常任务列表
 }
 
 export default api
