@@ -5,7 +5,7 @@
 			<div class="container">
 		        <div class="cont_box clearfix">
 		        	<ul class="clearfix">
-		        		<li v-for="(item,index) in goodsList">
+		        		<li v-for="(item,index) in goodsList" :key="index">
 		        			<div class="imgs" @click="exchangeGoods(item)">
 		        				<div class="title">剩{{item.surplus_num}}份</div>
 		        				<p class="reward">{{Number(item.goods_price)}}<i>元</i></p>
@@ -17,7 +17,7 @@
 		        </div>
 		        <div class="goods-tip">
 		            <h5>温馨提示:</h5>
-		            <p>1. 参与兑换即同意《805生活平台兑换协议</a>》。</p>
+		            <p>1. 参与兑换即同意《805生活平台兑换协议》。</p>
 		            <p>2. 兑换成功后，请在我的-商品订单记录中查看卡密，请登录京东网站进行充值；</p>
 		            <p>3. 京东E卡是由京东商城发行的经预付卡备案的单用途商业预付卡，可在www.jd.com网站内使用，仅用于购买京东自营商品；</p>
 		            <p>4. 京东E卡卡密升级时，可能延迟约10分钟发送卡密；</p>

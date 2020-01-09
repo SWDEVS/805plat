@@ -60,9 +60,8 @@ export default {
       this.payitem = payitemlist;
     },
     async wxstart() {
-      let config = await this.$get(this.$api.getwxconfig, {
-        url: window.location.href
-      });
+      
+      let config = await this.getwxconfig();
       this.$wx.config({
         beta: true,
         debug: false,
@@ -73,17 +72,8 @@ export default {
         jsApiList: ["getBrandWCPayRequest"]
       });
     },
-    async createorder(product_id) {
-      let param = {
-        pay_num: 1,
-        pay_type: 3,
-        product_id,
-        product_type: 1
-      };
-      let order = await this.$post(this.$api.createorder, param);
-      let orderconfig = await this.$post(this.$api.getpayconfig, {
-        order_no: order.orderno
-      });
+    async createorder(product_id,product_type) {
+      let orderconfig = await this.createOrder(product_id);
       if (orderconfig.data.jsApiParameters) {
         orderconfig = orderconfig.data.jsApiParameters;
       } else {
@@ -92,35 +82,23 @@ export default {
           type: "txt"
         });
         this.toast.show();
+        return;
       }
-
-      this.$wx.invoke(
-        "getBrandWCPayRequest",
-        {
-          appId: orderconfig.appId, //公众号名称，由商户传入
-          timeStamp: orderconfig.timeStamp, //时间戳，自1970年以来的秒数
-          nonceStr: orderconfig.nonceStr, //随机串
-          package: orderconfig.package,
-          signType: orderconfig.signType, //微信签名方式
-          paySign: orderconfig.paySign //微信签名
-        },
-      async function(res) {
-          var a = JSON.stringify(res);
-          if (res.err_msg == "get_brand_wcpay_request:ok") {
-            this.$store.dispatch("_showPurchase", false);
-            this.$emit("freshlist", "充值成功");
-            //更新金豆数量
-            let userinfo =await this.$post(this.$api.getuserinfo, {});
-            let baseinfo = {
-              ingot: userinfo.ingot,
-              ticket: userinfo.ticket
-            };
-            this.$store.dispatch("_currentBaseinfo", baseinfo);
-          } else {
-            this.$emit("freshlist", res.err_msg);
-          } // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
-        }
-      );
+      let res = await this.payup(orderconfig);
+      //var a = JSON.stringify(res);
+      if (res.err_msg == "get_brand_wcpay_request:ok") {
+        this.$store.dispatch("_showPurchase", false);
+        this.$emit("freshlist", "充值成功");
+        //更新金豆数量
+        let userinfo = await this.$post(this.$api.getuserinfo, {});
+        let baseinfo = {
+          ingot: userinfo.ingot,
+          ticket: userinfo.ticket
+        };
+        this.$store.dispatch("_currentBaseinfo", baseinfo);
+      } else {
+        this.$emit("freshlist", res.err_msg);
+      } // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
     }
   }
 };

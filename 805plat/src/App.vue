@@ -31,7 +31,10 @@ export default {
       let url = window.location.href;
 
       let token = this.$route.query.token;
-      //localStorage.setItem("vuex",'{"user":{"token":"489068c86e2f3f8abb54c91b9eeca5d4"}}');
+      // localStorage.setItem(
+      //   "vuex",
+      //   '{"user":{"token":"489068c86e2f3f8abb54c91b9eeca5d4"}}'
+      // );
       let vuexstorage = localStorage.getItem("vuex");
 
       let currentUser = "";
@@ -54,7 +57,7 @@ export default {
     }
   },
   created() {
-    //this.wxstart();
+    this.wxstart();
   },
   computed: {
     ...mapState({
@@ -64,18 +67,8 @@ export default {
   methods: {
     async wxstart() {
       let that = this;
-      let config = await this.$get(this.$api.getwxconfig, {
-        url: window.location.href
-      });
-      this.$wx.config({
-        beta: true,
-        debug: false,
-        appId: config.appid,
-        timestamp: config.timestamp,
-        nonceStr: config.nonceStr,
-        signature: config.signature,
-        jsApiList: ["getBrandWCPayRequest", "showMenuItems", "hideMenuItems"]
-      });
+      let config = await that.getwxconfig();
+      await that.setwxconfig(config);
 
       that.$wx.ready(function() {
         that.$wx.hideMenuItems({
