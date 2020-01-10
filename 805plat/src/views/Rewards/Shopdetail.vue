@@ -144,11 +144,9 @@ export default {
 			          href: 'javascript:;'
 			        },
 			        onConfirm: () => {
-			          
+			        	this.createorder(id,3)
 			        },
-			        onCancel: () => {
-			         
-			        }
+			        onCancel: () => {}
 			      }).show()
         	}else{
         		this.$createDialog({
@@ -166,7 +164,26 @@ export default {
     },
     line2br:function(text) {
 		return text.split('\n').join('<br/>');
-	}
+	},
+	async createorder(product_id,product_type) {
+        let orderconfig = await this.createOrder(product_id,product_type);
+        if (orderconfig.data.jsApiParameters) {
+          orderconfig = orderconfig.data.jsApiParameters;
+        } else {
+          this.toast = this.$createToast({
+            txt: "订单创建失败",
+            type: "txt"
+          });
+          this.toast.show();
+          return;
+        }
+        let res = await this.payup(orderconfig);
+        if (res.err_msg == "get_brand_wcpay_request:ok") {
+        	this.getCoupon(product_id);
+        } else {
+          this.$emit("freshlist", res.err_msg);
+        } // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+    }
   }
 };
 </script>

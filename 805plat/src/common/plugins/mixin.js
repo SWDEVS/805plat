@@ -33,12 +33,17 @@ export default () => {
       },
 
       //创建订单
-      async createOrder(product_id) {
+      async createOrder(product_id,product_type) {
+        //product_type
+        //1:金豆
+        //2:礼包
+        //3:优惠券
+        //4:实物
         let param = {
           pay_num: 1,
           pay_type: 3,
           product_id,
-          product_type: 1
+          product_type
         };
         let order = await this.$post(this.$api.createorder, param);
         let orderconfig = await this.$post(this.$api.getpayconfig, {

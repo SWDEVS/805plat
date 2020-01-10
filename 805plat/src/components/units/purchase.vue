@@ -23,7 +23,7 @@
             <img :src="item.icon" />
           </div>
           <div class="item-bean">{{item.ingot | formatNumberRgx}}金豆</div>
-          <div class="item-amount" @click="createorder(item.id)">
+          <div class="item-amount" @click="createorder(item.id,1)">
             <button class="btn-purchase">￥{{item.money}}</button>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default {
       });
     },
     async createorder(product_id,product_type) {
-      let orderconfig = await this.createOrder(product_id);
+      let orderconfig = await this.createOrder(product_id,product_type);
       if (orderconfig.data.jsApiParameters) {
         orderconfig = orderconfig.data.jsApiParameters;
       } else {
