@@ -166,7 +166,8 @@ export default {
 		return text.split('\n').join('<br/>');
 	},
 	async createorder(product_id,product_type) {
-        let orderconfig = await this.createOrder(product_id,product_type);
+        let order = await this.createOrder(product_id,product_type);
+        let orderconfig = await this.getorderconfig(order.orderno);
         if (orderconfig.data.jsApiParameters) {
           orderconfig = orderconfig.data.jsApiParameters;
         } else {
