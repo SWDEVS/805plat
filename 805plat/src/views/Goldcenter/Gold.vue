@@ -70,7 +70,7 @@
 						</div>
 					</div>
 					<div class="task_r">
-						<a href="javascript:;" class="complete" @click="share()" v-if="item.status == 0"></a>
+						<a href="javascript:;" class="complete" @click="toShare()" v-if="item.status == 0"></a>
 						<a href="javascript:;" class="recive" @click="receiveActive(item.id)" v-if="item.status == 1"></a>
 						<a href="javascript:;" class="finished" v-if="item.status == 2"></a>
 					</div>
@@ -154,28 +154,19 @@
 			    return total <= 0 ? 0 : (Math.round(num / total * 10000) / 100.00);
 			},
 			async wxstart() {
-		        let config = await this.$get(this.$api.getwxconfig, {
-		          url: window.location.href
-		        });
-		        this.$wx.config({
-		          beta: true,
-		          debug: false,
-		          appId: config.appid,
-		          timestamp: config.timestamp,
-		          nonceStr: config.nonceStr,
-		          signature: config.signature,
-		          jsApiList: ["updateAppMessageShareData","updateTimelineShareData"]
-		        });
+		        let that = this;
+			    let config = await that.getwxconfig();
+			    await that.setwxconfig(config);
 		    },
-		    share:function(){
-		    	console.log(this.$wx)
-			    this.$wx.updateAppMessageShareData({ 
+		    toShare:function(){
+		    	let that = this;
+			    that.$wx.updateAppMessageShareData({ 
 			      title: '1111', // 分享标题
 			      desc: '1111', // 分享描述
-			      link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+			      link: "https://m.805.com", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
 			      imgUrl: '', // 分享图标
 			      success: function () {// 设置成功
-			      	this.share();
+			      	
 			      }
 			    })
 		    },

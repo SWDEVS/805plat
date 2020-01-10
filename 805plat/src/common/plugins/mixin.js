@@ -28,7 +28,7 @@ export default () => {
           timestamp: config.timestamp,
           nonceStr: config.nonceStr,
           signature: config.signature,
-          jsApiList: ["getBrandWCPayRequest", "showMenuItems", "hideMenuItems"]
+          jsApiList: ["getBrandWCPayRequest", "showMenuItems", "hideMenuItems","updateAppMessageShareData","updateTimelineShareData"]
         });
       },
 
