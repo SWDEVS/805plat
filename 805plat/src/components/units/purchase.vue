@@ -87,7 +87,7 @@ export default {
         this.toast.show();
         return;
       }
-      await this.payup(orderconfig, function(res) {
+      this.payup(orderconfig, async function(res) {
         that.$store.dispatch("_showPurchase", false);
         if (res.err_msg == "get_brand_wcpay_request:ok") {
           that.$emit("freshlist", "充值成功");

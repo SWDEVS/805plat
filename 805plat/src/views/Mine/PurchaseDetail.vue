@@ -66,7 +66,7 @@ export default {
       purchasedetail: {}
     };
   },
-  created() {
+  async created() {
     let order_no = this.$route.params.orderno;
     this.getpurchasedetail(order_no);
     let config = await this.getwxconfig();
@@ -81,7 +81,7 @@ export default {
     },
     async gopay() {
       let that=this;
-      that.$wx.ready(function() {
+      that.$wx.ready(async function() {
         let orderconfig = await that.getorderconfig(that.purchasedetail.order_no);        
         if (orderconfig.data.jsApiParameters) {
           orderconfig = orderconfig.data.jsApiParameters;
@@ -93,7 +93,7 @@ export default {
         that.toast.show();
         return;
       }
-      let res = await that.payup(orderconfig, function(res) {
+      let res = await that.payup(orderconfig, async function(res) {
         if (res.err_msg == "get_brand_wcpay_request:ok") {
           that.getpurchasedetail(that.purchasedetail.order_no);
         } else {
