@@ -33,6 +33,7 @@ const api = {
     activelist:baseUrl+"/gameuser/activelist",//日常任务列表
     share:baseUrl+"/gameuser/Share",//日常任务列表
     receiveActive:baseUrl+"/gameuser/ReceiveActive",//日常任务列表
+    gethotcates:baseUrl+"/gameshop/hotcates",//商品分类
 }
 
 export default api

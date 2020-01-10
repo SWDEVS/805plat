@@ -40,7 +40,7 @@
 								</div>
 							</div>
 							<div class="day_b">
-								<p :class="[item.status == 1 ? 'active':'']">{{item.sign}}天</p>
+								<p :class="[item.status == 1 ? 'active':'']">{{item.is_today == 1 ? '今' : item.sign}}天</p>
 							</div>
 						</div>
 					</div>

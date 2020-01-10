@@ -78,6 +78,12 @@
 					this.selectedLabel = "全部商品";
 				}
 			},
+			async gethotCates(){
+				let res = await this.$post(this.$api.gethotcates, "");
+				if (res && res._status == '200'){
+					
+				}
+			},
 			async getshopList(id){
 				let res = await this.$get(this.$api.list, {
 					cateid: id
@@ -113,6 +119,7 @@
 		},
 		created(){
 			this.getCates();
+			this.gethotCates();
 			this.getshopList('0');
 		},
 		mounted(){

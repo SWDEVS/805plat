@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Xheader title="购物卡" :back="true"></Xheader>
+		<Xheader title="电影票" :back="true"></Xheader>
 		<Xcont :header="true">
 			<div class="container">
 		        <div class="cont_box clearfix">
@@ -47,7 +47,7 @@
 		methods:{
 			async getList(){
 				let res = await this.$get(this.$api.listhot, {
-					category: 'shopcard'
+					category: 'movie'
 				});
 				if (res && res._status == '200'){
 					// this.info.user_id = res.user_id;
