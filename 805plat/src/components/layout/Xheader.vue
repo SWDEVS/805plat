@@ -46,10 +46,14 @@ export default {
     handleLeft() {
       this.$emit("leftClick");
       if (this.routerBack === false) {
-        return;  
+        return;
       }
       if (this.back) {
-        this.$router.back();
+        if (window.history.length <= 1) {
+          this.$router.push("/");
+        } else {
+          this.$router.back();
+        }
       }
     },
     handleRight() {
@@ -69,10 +73,10 @@ header {
   align-items: center;
   align-content: center;
   position: fixed;
-  font-size:$size-m;
+  font-size: $size-m;
   top: 0;
   color: #fff;
-  z-index:999;
+  z-index: 999;
 
   .left, .right {
     width: 90px;

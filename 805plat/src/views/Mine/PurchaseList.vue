@@ -34,7 +34,7 @@
             >
               <div class="row-item">
                 <i class="iconfont icon-money"></i>
-                {{item.money}}
+                {{item.money|formatmoney}}
               </div>
               <div class="row-item">{{item.total_ingot|formatNumberRgx}}</div>
               <!-- <div class="row-item">{{item.mg_charm|formatNumberRgx}}</div> -->
@@ -74,12 +74,12 @@ export default {
     return {
       page: 1,
       tip: "最近暂无充值记录~",
-      purchaselist: [
-      ]
+      purchaselist: []
     };
   },
   created() {
     this.getpurchaselist();
+    console.log(this.$router);
   },
   computed: {
     ...mapState({
@@ -117,7 +117,7 @@ export default {
       this.toast.show();
       this.page = 1;
       this.purchaselist.length = 0;
-      this.getpurchaselist();//刷新列表
+      this.getpurchaselist(); //刷新列表
     }
   }
 };

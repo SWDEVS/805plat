@@ -16,7 +16,7 @@
             <div class="title">充值总额</div>
             <div class="txt">
               <i class="iconfont icon-money"></i>
-              {{purchasedetail.money|formatNumberRgx}}
+              {{purchasedetail.money|formatmoney}}
             </div>
           </div>
           <div class="info-row">
@@ -69,6 +69,7 @@ export default {
   created() {
     let order_no = this.$route.params.orderno;
     this.getpurchasedetail(order_no);
+    console.log(this.$router);
   },
   methods: {
     async getpurchasedetail(order_no) {
@@ -92,9 +93,9 @@ export default {
       let res = await this.payup(orderconfig);
       //var a = JSON.stringify(res);
       if (res.err_msg == "get_brand_wcpay_request:ok") {
-        this.getpurchasedetail(this.purchasedetail.order_no)
-      }else{
-         this.toast = this.$createToast({
+        this.getpurchasedetail(this.purchasedetail.order_no);
+      } else {
+        this.toast = this.$createToast({
           txt: res.msg,
           type: "txt"
         });

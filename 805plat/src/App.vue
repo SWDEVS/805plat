@@ -22,6 +22,7 @@ export default {
     };
   },
   async beforeCreate() {
+    
     let status = this.$route.query.status;
     if (status) {
       this.$router.push({
@@ -36,7 +37,7 @@ export default {
       //   '{"user":{"token":"f9c8e3abef3721ece57700446874880c"}}'
       // );
       let vuexstorage = localStorage.getItem("vuex");
-
+      
       let currentUser = "";
       if (vuexstorage) {
         let vuexobj = JSON.parse(vuexstorage);
@@ -45,10 +46,10 @@ export default {
           currentUser = vuexobj.user.token;
         }
       }
-      if (currentUser) {
-        return;
-      } else if (!currentUser && token) {
+      
+     if (!currentUser && token) {
         await this.$store.dispatch("_currentUser", token);
+        this.$router.push("/");
       }
       if (!currentUser && !token) {
         url = escape(url);
@@ -57,7 +58,7 @@ export default {
     }
   },
   created() {
-    this.wxstart();
+    //this.wxstart();
   },
   computed: {
     ...mapState({
