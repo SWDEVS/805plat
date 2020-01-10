@@ -96,6 +96,7 @@ export default {
   },
   created() {
     this.getuserinfo();
+    console.log( this.$router);
   },
   computed: {
     ...mapState({

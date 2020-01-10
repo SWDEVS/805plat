@@ -1,6 +1,13 @@
 <template>
   <div>
-    <Xcont :header="false"><div>{{msg}}</div></Xcont>
+    <Xcont :header="false">
+      <div>
+        <div style="width:70%;padding:100px 0 20px;margin: 0 auto;">
+          <img style="width:100%;" src="@/assets/images/qrcode.jpg" />
+        </div>
+        <div style="width:100%;padding:0 10px;text-align: center;">{{msg}}</div>
+      </div>
+    </Xcont>
   </div>
 </template>
 <script>
@@ -12,7 +19,7 @@ export default {
   },
   data() {
     return {
-      msg: "您尚未关注805生活平台公众号，请先关注公众号"
+      msg: "您尚未关注805生活，长按二维码识别关注"
     };
   },
   async created() {},
