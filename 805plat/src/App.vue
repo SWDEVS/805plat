@@ -33,7 +33,7 @@ export default {
       let token = this.$route.query.token;
       // localStorage.setItem(
       //   "vuex",
-      //   '{"user":{"token":"489068c86e2f3f8abb54c91b9eeca5d4"}}'
+      //   '{"user":{"token":"f9c8e3abef3721ece57700446874880c"}}'
       // );
       let vuexstorage = localStorage.getItem("vuex");
 

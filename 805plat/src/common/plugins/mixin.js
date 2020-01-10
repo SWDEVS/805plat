@@ -46,8 +46,11 @@ export default () => {
           product_type
         };
         let order = await this.$post(this.$api.createorder, param);
+        return order
+      },
+      async getorderconfig(orderno){
         let orderconfig = await this.$post(this.$api.getpayconfig, {
-          order_no: order.orderno
+          order_no: orderno
         });
         return orderconfig;
       },

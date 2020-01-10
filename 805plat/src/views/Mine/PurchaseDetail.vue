@@ -4,7 +4,8 @@
     <Xcont :header="true">
       <div class="container">
         <div class="info-title">
-          <i class="iconfont icon-ingot"></i>{{purchasedetail.total_ingot|formatNumberRgx}}
+          <i class="iconfont icon-ingot"></i>
+          {{purchasedetail.total_ingot|formatNumberRgx}}
         </div>
         <div class="info-list">
           <div class="info-row">
@@ -44,6 +45,10 @@
         </div>
       </div>
     </Xcont>
+
+    <div class="btn-block" v-show="purchasedetail.pay_status=='1'">
+      <cube-button class="btn-primary" :primary="true">去支付</cube-button>
+    </div>
   </div>
 </template>
 <script>
@@ -71,6 +76,30 @@ export default {
         order_no
       });
       this.purchasedetail = purchasedetail.one;
+    },
+    async payup() {
+      let orderconfig = await this.getorderconfig(this.purchasedetail.order_no);
+      if (orderconfig.data.jsApiParameters) {
+        orderconfig = orderconfig.data.jsApiParameters;
+      } else {
+        this.toast = this.$createToast({
+          txt: "订单错误",
+          type: "txt"
+        });
+        this.toast.show();
+        return;
+      }
+      let res = await this.payup(orderconfig);
+      //var a = JSON.stringify(res);
+      if (res.err_msg == "get_brand_wcpay_request:ok") {
+        this.getpurchasedetail(this.purchasedetail.order_no)
+      }else{
+         this.toast = this.$createToast({
+          txt: res.msg,
+          type: "txt"
+        });
+        this.toast.show();
+      }
     }
   }
 };
@@ -118,6 +147,23 @@ export default {
         color: $color-regular-blue;
       }
     }
+  }
+}
+
+.btn-block {
+  position: fixed;
+  bottom: $padding-l;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .btn-primary {
+    width: 450px;
+    height: 70px;
+    margin: 0 auto;
+    font-size: 28px;
+    border-radius: 10px;
+    background-image: linear-gradient(#ff704c, #ff3231);
   }
 }
 </style>

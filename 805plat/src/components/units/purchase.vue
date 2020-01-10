@@ -60,7 +60,6 @@ export default {
       this.payitem = payitemlist;
     },
     async wxstart() {
-      
       let config = await this.getwxconfig();
       this.$wx.config({
         beta: true,
@@ -72,13 +71,16 @@ export default {
         jsApiList: ["getBrandWCPayRequest"]
       });
     },
-    async createorder(product_id,product_type) {
-      let orderconfig = await this.createOrder(product_id,product_type);
+
+    async createorder(product_id, product_type) {
+      let order = await this.createOrder(product_id,product_type);
+      let orderconfig = await this.getorderconfig(order.orderno);
+
       if (orderconfig.data.jsApiParameters) {
         orderconfig = orderconfig.data.jsApiParameters;
       } else {
         this.toast = this.$createToast({
-          txt: "订单创建失败",
+          txt: "订单错误",
           type: "txt"
         });
         this.toast.show();
@@ -97,7 +99,7 @@ export default {
         };
         this.$store.dispatch("_currentBaseinfo", baseinfo);
       } else {
-        this.$emit("freshlist", res.err_msg);
+        this.$emit("freshlist", "充值失败");
       } // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
     }
   }
