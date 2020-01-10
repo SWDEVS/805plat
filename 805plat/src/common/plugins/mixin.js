@@ -56,7 +56,7 @@ export default () => {
       },
 
       //调起支付
-      async payup(orderconfig) {
+      async payup(orderconfig,callback) {
         this.$wx.invoke(
           "getBrandWCPayRequest",
           {
@@ -67,8 +67,10 @@ export default () => {
             signType: orderconfig.signType, //微信签名方式
             paySign: orderconfig.paySign //微信签名
           },
-          async function (res) {
-            return res;
+          function (res) {
+            if(callback){
+              callback(res);
+            }
           }
         )
       }

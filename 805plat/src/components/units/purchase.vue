@@ -73,9 +73,10 @@ export default {
     },
 
     async createorder(product_id, product_type) {
+      let that=this;
       let order = await this.createOrder(product_id, product_type);
       let orderconfig = await this.getorderconfig(order.orderno);
-      console.log(orderconfig);
+
       if (orderconfig.data.jsApiParameters) {
         orderconfig = orderconfig.data.jsApiParameters;
       } else {
@@ -86,25 +87,20 @@ export default {
         this.toast.show();
         return;
       }
-      let res = await this.payup(orderconfig);
-      //var a = JSON.stringify(res);
-      if (res) {
+      await this.payup(orderconfig, function(res) {
+        that.$store.dispatch("_showPurchase", false);
         if (res.err_msg == "get_brand_wcpay_request:ok") {
-          this.$store.dispatch("_showPurchase", false);
-          this.$emit("freshlist", "充值成功");
-          //更新金豆数量
-          let userinfo = await this.$post(this.$api.getuserinfo, {});
+          that.$emit("freshlist", "充值成功");
+          let userinfo = await that.$post(that.$api.getuserinfo, {});
           let baseinfo = {
-            ingot: userinfo.ingot,
-            ticket: userinfo.ticket
-          };
-          this.$store.dispatch("_currentBaseinfo", baseinfo);
+            ingot: userinfo.ingot,     
+            ticket: userinfo.ticketf
+          }
+          that.$store.dispatch("_currentBaseinfo", baseinfo);
         } else {
-          this.$emit("freshlist", "充值失败");
-        } // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
-      }else{
-        this.$emit("freshlist", "您已取消支付");
-      }
+          that.$emit("freshlist", "充值失败");
+        }
+      });
     }
   }
 };

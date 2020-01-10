@@ -58,7 +58,7 @@ export default {
     }
   },
   created() {
-    //this.wxstart();
+    this.wxstart();
   },
   computed: {
     ...mapState({

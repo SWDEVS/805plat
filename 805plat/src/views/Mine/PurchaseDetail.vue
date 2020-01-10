@@ -47,7 +47,7 @@
     </Xcont>
 
     <div class="btn-block" v-show="purchasedetail.pay_status=='1'">
-      <cube-button class="btn-primary" :primary="true">去支付</cube-button>
+      <cube-button class="btn-primary" :primary="true" @click="gopay">去支付</cube-button>
     </div>
   </div>
 </template>
@@ -69,7 +69,8 @@ export default {
   created() {
     let order_no = this.$route.params.orderno;
     this.getpurchasedetail(order_no);
-    console.log(this.$router);
+    let config = await this.getwxconfig();
+    this.setwxconfig(config);
   },
   methods: {
     async getpurchasedetail(order_no) {
@@ -78,30 +79,33 @@ export default {
       });
       this.purchasedetail = purchasedetail.one;
     },
-    async payup() {
-      let orderconfig = await this.getorderconfig(this.purchasedetail.order_no);
-      if (orderconfig.data.jsApiParameters) {
-        orderconfig = orderconfig.data.jsApiParameters;
-      } else {
-        this.toast = this.$createToast({
+    async gopay() {
+      let that=this;
+      that.$wx.ready(function() {
+        let orderconfig = await that.getorderconfig(that.purchasedetail.order_no);        
+        if (orderconfig.data.jsApiParameters) {
+          orderconfig = orderconfig.data.jsApiParameters;
+        } else {
+        that.toast = that.$createToast({
           txt: "订单错误",
           type: "txt"
-        });
-        this.toast.show();
+         });
+        that.toast.show();
         return;
       }
-      let res = await this.payup(orderconfig);
-      //var a = JSON.stringify(res);
-      if (res.err_msg == "get_brand_wcpay_request:ok") {
-        this.getpurchasedetail(this.purchasedetail.order_no);
-      } else {
-        this.toast = this.$createToast({
-          txt: res.msg,
-          type: "txt"
-        });
-        this.toast.show();
-      }
-    }
+      let res = await that.payup(orderconfig, function(res) {
+        if (res.err_msg == "get_brand_wcpay_request:ok") {
+          that.getpurchasedetail(that.purchasedetail.order_no);
+        } else {
+          that.toast = that.$createToast({
+            txt: res.msg,
+            type: "txt"
+          });
+          that.toast.show();
+        }
+      });
+      })
+    }    
   }
 };
 </script>
