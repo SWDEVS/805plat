@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Xheader title="金币中心" :back="true"></Xheader>
+		<Xheader title="任务中心" :back="true"></Xheader>
 		<Xcont :header="true">
 			<div class="content">
 				<div class="title">
