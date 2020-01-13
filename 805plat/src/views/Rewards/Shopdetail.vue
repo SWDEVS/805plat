@@ -149,18 +149,21 @@ export default {
 			        onCancel: () => {}
 			      }).show()
         	}else{
-        		this.$createDialog({
-			        type: 'alert',
-			        icon: 'cubeic-right',
-			        showClose: true,
-			        title: '领取成功',
-			        content:'是否前往优惠券列表查看?',
-			        onConfirm: () => {
-			        	this.$router.push('/mine/Coupon');
-			        }
-			     }).show()
+        		this.goCouponlist();
         	}
         }
+    },
+    goCouponlist:function(){
+    	this.$createDialog({
+	        type: 'alert',
+	        icon: 'cubeic-right',
+	        showClose: true,
+	        title: '优惠券领取成功',
+	        content:'是否前往优惠券列表查看?',
+	        onConfirm: () => {
+	        	this.$router.push('/mine/Coupon');
+	        }
+	     }).show();
     },
     line2br:function(text) {
 		return text.split('\n').join('<br/>');
@@ -178,7 +181,7 @@ export default {
         this.payup(orderconfig, async function(res) {
         if (res.err_msg == "get_brand_wcpay_request:ok") {
             showToastTxtOnly('充值成功');
-            that.getCoupon(product_id);
+            that.goCouponlist();
         } else {
             showToastTxtOnly('充值失败');
         }

@@ -47,7 +47,7 @@
                       v-for="(recorditem,index) in item.list"
                       :key="index"
                       :title="recorditem.reason"
-                      :time="recorditem.time"
+                      :time="recorditem.add_time"
                       :num="recorditem.ticket"
                     ></ListItem>
                   </template>
