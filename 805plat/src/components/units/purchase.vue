@@ -23,7 +23,7 @@
             <img :src="item.icon" />
           </div>
           <div class="item-bean">{{item.ingot | formatNumberRgx}}金豆</div>
-          <div class="item-amount" @click="createorder(item.id,1)">
+          <div class="item-amount" @click="_debounceorder(item.id,1)">
             <button class="btn-purchase">￥{{item.money}}</button>
           </div>
         </div>
@@ -73,8 +73,8 @@ export default {
       });
     },
 
-    _debounceorder(){
-      debounce(this.createorder,500);
+    _debounceorder(product_id,product_type){
+      debounce(this.createorder(product_id,product_type),500);
     },
 
     async createorder(product_id, product_type) {

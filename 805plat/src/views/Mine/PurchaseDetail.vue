@@ -54,6 +54,7 @@
 <script>
 import Xheader from "@/components/layout/Xheader.vue";
 import Xcont from "@/components/layout/Xcontent.vue";
+import { debounce } from "debounce";
 import { mapState } from "vuex";
 export default {
   name: "PurchaseDetail",
@@ -79,35 +80,44 @@ export default {
       });
       this.purchasedetail = purchasedetail.one;
     },
+    _debouncepay() {
+      debounce(this.gopay(), 500);
+    },
+
     async gopay() {
-      let that=this;
+      let that = this;
       that.$wx.ready(async function() {
-        let orderconfig = await that.getorderconfig(that.purchasedetail.order_no);        
+        let orderconfig = await that.getorderconfig(
+          that.purchasedetail.order_no
+        );
         if (orderconfig.data.jsApiParameters) {
           orderconfig = orderconfig.data.jsApiParameters;
         } else {
-        that.toast = that.$createToast({
-          txt: "订单错误",
-          type: "txt"
-         });
-        that.toast.show();
-        return;
-      }
-      let res = await that.payup(orderconfig, async function(res) {
-         console.log(res);
-        if (res.err_msg == "get_brand_wcpay_request:ok") {
-          that.getpurchasedetail(that.purchasedetail.order_no);
-        } else {
-          let errmsg=res.err_msg == "get_brand_wcpay_request:cancel"?"您已取消充值":"充值失败";
           that.toast = that.$createToast({
-            txt: errmsg,
+            txt: "订单错误",
             type: "txt"
           });
           that.toast.show();
+          return;
         }
+        let res = await that.payup(orderconfig, async function(res) {
+          console.log(res);
+          if (res.err_msg == "get_brand_wcpay_request:ok") {
+            that.getpurchasedetail(that.purchasedetail.order_no);
+          } else {
+            let errmsg =
+              res.err_msg == "get_brand_wcpay_request:cancel"
+                ? "您已取消充值"
+                : "充值失败";
+            that.toast = that.$createToast({
+              txt: errmsg,
+              type: "txt"
+            });
+            that.toast.show();
+          }
+        });
       });
-      })
-    }    
+    }
   }
 };
 </script>
