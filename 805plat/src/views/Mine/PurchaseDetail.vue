@@ -94,11 +94,13 @@ export default {
         return;
       }
       let res = await that.payup(orderconfig, async function(res) {
+         console.log(res);
         if (res.err_msg == "get_brand_wcpay_request:ok") {
           that.getpurchasedetail(that.purchasedetail.order_no);
         } else {
+          let errmsg=res.err_msg == "get_brand_wcpay_request:cancel"?"您已取消充值":"充值失败";
           that.toast = that.$createToast({
-            txt: res.msg,
+            txt: errmsg,
             type: "txt"
           });
           that.toast.show();

@@ -88,6 +88,7 @@ export default {
         return;
       }
       this.payup(orderconfig, async function(res) {
+        console.log(res);
         that.$store.dispatch("_showPurchase", false);
         if (res.err_msg == "get_brand_wcpay_request:ok") {
           that.$emit("freshlist", "充值成功");
@@ -97,6 +98,8 @@ export default {
             ticket: userinfo.ticketf
           }
           that.$store.dispatch("_currentBaseinfo", baseinfo);
+        }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+          that.$emit("freshlist", "您已取消充值");
         } else {
           that.$emit("freshlist", "充值失败");
         }
