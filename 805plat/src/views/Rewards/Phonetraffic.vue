@@ -95,7 +95,7 @@
 					return l_arr;
 				}
 			},
-			async getuserbaseinfo(){
+			async getuserbaseinfo(item){
 				let res = await this.$post(this.$api.getuserbaseinfo,"");
 				if(res && res._status == '200'){
 					if(!res.userExt.phone){
@@ -111,12 +111,11 @@
 					    }).show();
 					    return false;
 					}
-					return true;
+					this.isCheck(item);
 				}
 			},
 			exchangeGoods:function(item){
-				if(!this.getuserbaseinfo()) return false;
-				this.isCheck(item);
+				this.getuserbaseinfo(item);
 			},
 			async isCheck(item){
 				let res = await this.$post(this.$api.convertgoods,{
