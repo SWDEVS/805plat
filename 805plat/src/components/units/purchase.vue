@@ -32,6 +32,7 @@
   </div>
 </template>
 <script>
+import { debounce } from "debounce";
 import { mapState } from "vuex";
 
 export default {
@@ -72,7 +73,12 @@ export default {
       });
     },
 
+    _debounceorder(){
+      debounce(this.createorder,500);
+    },
+
     async createorder(product_id, product_type) {
+      console.log(111);
       let that=this;
       let order = await this.createOrder(product_id, product_type);
       let orderconfig = await this.getorderconfig(order.orderno);
