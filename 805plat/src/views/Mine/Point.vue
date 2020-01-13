@@ -114,6 +114,7 @@ export default {
     let paylist = await this.getpaylist();
     this.tabs[0].list = incomelist.list;
     this.tabs[1].list = paylist.list;
+    this.getuserinfo();
   },
   computed: {
     ...mapState({
@@ -123,6 +124,15 @@ export default {
   methods: {
     changeHandler(label) {
       this.tip = `最近暂无${label}记录~`;
+    },
+    async getuserinfo() {
+      let userinfo = await this.$post(this.$api.getuserinfo, {});
+      this.userinfo = userinfo;
+      let baseinfo = {
+        ingot: userinfo.ingot,
+        ticket: userinfo.ticket
+      };
+      this.$store.dispatch("_currentBaseinfo", baseinfo);
     },
     async getincomelist() {
       let param = {
@@ -145,7 +155,7 @@ export default {
       this.paypage += 1;
       return paylist;
     },
-    
+
     async onPullingUp() {
       if (this.selectedLabel == "收入") {
         let incomelist = await this.getincomelist();
