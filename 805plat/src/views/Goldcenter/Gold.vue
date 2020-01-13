@@ -71,8 +71,8 @@
 					</div>
 					<div class="task_r">
 						<a href="javascript:;" class="complete" @click="toShare()" v-if="item.status == 0"></a>
-						<a href="javascript:;" class="recive" @click="receiveActive(item.id)" v-if="item.status == 1"></a>
-						<a href="javascript:;" class="finished" v-if="item.status == 2"></a>
+						<a href="javascript:;" class="recive" @click="receiveActive(item.id)" v-if="item.status == 2"></a>
+						<a href="javascript:;" class="finished" v-if="item.status == 1"></a>
 					</div>
 				</div>
 			</div>
@@ -160,6 +160,12 @@
 			        showClose: true,
 			        title: '提示',
 			        content:'请在公众号“积分获得”中打开并分享“满贯捕鱼体验版”',
+			        confirmBtn: {
+			            text: '前往分享',
+			            active: true,
+			            disabled: false,
+			            href: 'javascript:;'
+			        },
 			        onConfirm: () => {
 			        	this.share();
 			        	this.$wx.closeWindow();
@@ -170,7 +176,7 @@
 		        let config = await this.$post(this.$api.share, "");
 		    },
 		    async receiveActive(id){
-		    	let res = await this.$get(this.$api.receiveActive, {
+		    	let res = await this.$post(this.$api.receiveActive, {
 		    		id:id
 		    	});
 		    	if (res && res._status == '200') {
@@ -183,6 +189,7 @@
 				        onConfirm: () => {}
 				     }).show();
 					this.getActivelist();
+					this.getuserinfo();
 				}
 		    }
 		},
