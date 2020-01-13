@@ -47,7 +47,7 @@
     </Xcont>
 
     <div class="btn-block" v-show="purchasedetail.pay_status=='1'">
-      <cube-button class="btn-primary" :primary="true" @click="gopay">去支付</cube-button>
+      <cube-button class="btn-primary" :primary="true" @click="_debouncepay">去支付</cube-button>
     </div>
   </div>
 </template>
