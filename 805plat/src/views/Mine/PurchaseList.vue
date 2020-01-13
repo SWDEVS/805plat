@@ -79,7 +79,6 @@ export default {
   },
   created() {
     this.getpurchaselist();
-    console.log(this.$router);
   },
   computed: {
     ...mapState({
@@ -97,7 +96,6 @@ export default {
         page: this.page
       };
       let purchaselist = await this.$get(this.$api.getpurchaselist, param);
-      console.log(purchaselist);
       this.purchaselist = this.purchaselist.concat(purchaselist.pay_list);
       this.page += 1;
     },

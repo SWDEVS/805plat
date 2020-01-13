@@ -23,7 +23,7 @@
             <img :src="item.icon" />
           </div>
           <div class="item-bean">{{item.ingot | formatNumberRgx}}金豆</div>
-          <div class="item-amount" @click="_debounceorder(item.id,1)">
+          <div class="item-amount" @click="debouncecreateorder(item.id,1)">
             <button class="btn-purchase">￥{{item.money}}</button>
           </div>
         </div>
@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-import { debounce } from "debounce";
+import lodash from "lodash";
 import { mapState } from "vuex";
 
 export default {
@@ -73,13 +73,8 @@ export default {
       });
     },
 
-    _debounceorder(product_id,product_type){
-      debounce(this.createorder(product_id,product_type),500);
-    },
-
-    async createorder(product_id, product_type) {
-      console.log(111);
-      let that=this;
+    debouncecreateorder: lodash.debounce(async function(product_id, product_type) {
+      let that = this;
       let order = await this.createOrder(product_id, product_type);
       let orderconfig = await this.getorderconfig(order.orderno);
 
@@ -94,23 +89,22 @@ export default {
         return;
       }
       this.payup(orderconfig, async function(res) {
-        console.log(res);
         that.$store.dispatch("_showPurchase", false);
         if (res.err_msg == "get_brand_wcpay_request:ok") {
           that.$emit("freshlist", "充值成功");
           let userinfo = await that.$post(that.$api.getuserinfo, {});
           let baseinfo = {
-            ingot: userinfo.ingot,     
+            ingot: userinfo.ingot,
             ticket: userinfo.ticketf
-          }
+          };
           that.$store.dispatch("_currentBaseinfo", baseinfo);
-        }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+        } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
           that.$emit("freshlist", "您已取消充值");
         } else {
           that.$emit("freshlist", "充值失败");
         }
       });
-    }
+    }, 1000)
   }
 };
 </script>

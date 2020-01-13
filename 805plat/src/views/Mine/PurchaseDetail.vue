@@ -47,14 +47,14 @@
     </Xcont>
 
     <div class="btn-block" v-show="purchasedetail.pay_status=='1'">
-      <cube-button class="btn-primary" :primary="true" @click="_debouncepay">去支付</cube-button>
+      <cube-button class="btn-primary" :primary="true" @click="debouncepay">去支付</cube-button>
     </div>
   </div>
 </template>
 <script>
 import Xheader from "@/components/layout/Xheader.vue";
 import Xcont from "@/components/layout/Xcontent.vue";
-import { debounce } from "debounce";
+import lodash from "lodash";
 import { mapState } from "vuex";
 export default {
   name: "PurchaseDetail",
@@ -80,11 +80,7 @@ export default {
       });
       this.purchasedetail = purchasedetail.one;
     },
-    _debouncepay() {
-      debounce(this.gopay(), 500);
-    },
-
-    async gopay() {
+    debouncepay: lodash.debounce(function() {
       let that = this;
       that.$wx.ready(async function() {
         let orderconfig = await that.getorderconfig(
@@ -101,7 +97,6 @@ export default {
           return;
         }
         let res = await that.payup(orderconfig, async function(res) {
-          console.log(res);
           if (res.err_msg == "get_brand_wcpay_request:ok") {
             that.getpurchasedetail(that.purchasedetail.order_no);
           } else {
@@ -117,7 +112,7 @@ export default {
           }
         });
       });
-    }
+    }, 500)
   }
 };
 </script>

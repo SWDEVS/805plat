@@ -164,8 +164,6 @@ export default {
           //   this.$refs.income[0].forceUpdate(false);
           // }
         } else {
-          //console.log(this.$refs.income);
-
           this.$refs.income[0].forceUpdate(false);
         }
       } else {
