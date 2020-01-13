@@ -11,7 +11,7 @@
           <div class="num">{{baseinfo.ticket|formatNumberRgx}}</div>
         </div>
         <div class="btn-block">
-          <button class="btn-banner"></button>
+          <button class="btn-banner" @click="signup"></button>
         </div>
         <div class="tip">积分用于兑换实物和优惠券,积分在游戏中产出</div>
       </div>
@@ -134,6 +134,11 @@ export default {
       };
       this.$store.dispatch("_currentBaseinfo", baseinfo);
     },
+
+    signup() {
+      this.$router.push("/gold");
+    },
+
     async getincomelist() {
       let param = {
         type: 1,
@@ -226,7 +231,6 @@ export default {
       background: url('assets/images/T_buttom03.png');
       border: none;
       background-size: cover;
-      display: none;
     }
   }
 }
