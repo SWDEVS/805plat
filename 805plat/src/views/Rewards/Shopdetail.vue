@@ -78,9 +78,9 @@
   </div>
 </template>
 <script>
-
 import Xheader from "@/components/layout/Xheader.vue";
 import Xcont from "@/components/layout/Xcontent.vue";
+import { showToastTxtOnly } from "@/common/plugins/filters.js";
 export default {
   name: "Rewards",
   components: {
@@ -166,24 +166,23 @@ export default {
 		return text.split('\n').join('<br/>');
 	},
 	async createorder(product_id,product_type) {
+		let that=this;
         let order = await this.createOrder(product_id,product_type);
         let orderconfig = await this.getorderconfig(order.orderno);
         if (orderconfig.data.jsApiParameters) {
           orderconfig = orderconfig.data.jsApiParameters;
         } else {
-          this.toast = this.$createToast({
-            txt: "订单创建失败",
-            type: "txt"
-          });
-          this.toast.show();
+          showToastTxtOnly('创建订单失败');
           return;
         }
-        let res = await this.payup(orderconfig);
+        this.payup(orderconfig, async function(res) {
         if (res.err_msg == "get_brand_wcpay_request:ok") {
-        	this.getCoupon(product_id);
+            showToastTxtOnly('充值成功');
+            that.getCoupon(product_id);
         } else {
-          this.$emit("freshlist", res.err_msg);
-        } // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+            showToastTxtOnly('充值失败');
+        }
+      });
     }
   }
 };

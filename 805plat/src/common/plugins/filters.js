@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { Toast } from 'cube-ui'
 export function fmoney(num) {
   num = num * 1;
   let numstr = num.toFixed(2);
@@ -138,4 +139,17 @@ export function sessionData(method, name, obj) {
       sessionStorage.removeItem(name + '_str');
       return true;
   }
+}
+export function showToastTxtOnly(txt,type,time,func){
+  const toast = Toast.$create({
+    txt: txt,
+    type: type ? type : 'txt',
+    time: time,
+    $events: {
+      timeout: () => {
+        func()
+      }
+    }
+  })
+  toast.show();
 }

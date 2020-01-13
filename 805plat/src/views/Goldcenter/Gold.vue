@@ -167,7 +167,7 @@
 			     }).show()
 		    },
 		    async share() {
-		        let config = await this.$get(this.$api.share, "");
+		        let config = await this.$post(this.$api.share, "");
 		    },
 		    async receiveActive(id){
 		    	let res = await this.$get(this.$api.receiveActive, {
