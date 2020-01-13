@@ -40,6 +40,7 @@
 	import Xheader from "@/components/layout/Xheader.vue";
 	import Xcont from "@/components/layout/Xcontent.vue";
 	import cubePop from "@/views/Rewards/Goodsaddress.vue";
+	import { showToastTxtOnly } from "@/common/plugins/filters.js";
 	export default{
 		name:"",
 		data(){
@@ -86,16 +87,41 @@
 					is_check: 1
 				});
 				if(res && res._status == '200'){
-					this.$createDialog({
-				        type: 'alert',
-				        icon: 'cubeic-right',
-				        showClose: true,
-				        title: "提示",
-				        content: `兑换将花费"${this.goods_detail.use_num}积分"`,
-				        onConfirm: () => {
-				        	this.confirmGoods();
-				        }
-				    }).show();
+					if(res.pay_money && res.pay_money != ''){
+						this.$createDialog({
+					        type: 'confirm',
+					        icon: 'cubeic-info',
+					        title: '积分不足',
+					        content: `您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,
+					        confirmBtn: {
+					          text: '确定',
+					          active: true,
+					          disabled: false,
+					          href: 'javascript:;'
+					        },
+					        cancelBtn: {
+					          text: '取消',
+					          active: false,
+					          disabled: false,
+					          href: 'javascript:;'
+					        },
+					        onConfirm: () => {
+					        	this.createorder(this.goods_detail.goods_id,4)
+					        },
+					        onCancel: () => {}
+					      }).show()
+					}else{
+						this.$createDialog({
+					        type: 'alert',
+					        icon: 'cubeic-right',
+					        showClose: true,
+					        title: "提示",
+					        content: `兑换将花费"${this.goods_detail.use_num}积分"`,
+					        onConfirm: () => {
+					        	this.confirmGoods();
+					        }
+					    }).show();
+					}
 				}
 			},
 			async confirmGoods(){
@@ -119,7 +145,26 @@
 				if(this.getuserbaseinfo()){
 					this.isCheck();
 				};
-			}
+			},
+			async createorder(product_id,product_type) {
+				let that=this;
+		        let order = await this.createOrder(product_id,product_type);
+		        let orderconfig = await this.getorderconfig(order.orderno);
+		        if (orderconfig.data.jsApiParameters) {
+		          orderconfig = orderconfig.data.jsApiParameters;
+		        } else {
+		          showToastTxtOnly('创建订单失败');
+		          return;
+		        }
+		        this.payup(orderconfig, async function(res) {
+		        if (res.err_msg == "get_brand_wcpay_request:ok") {
+		            showToastTxtOnly('充值成功');
+		            that.luckyDraw();
+		        } else {
+		            showToastTxtOnly('充值失败');
+		        }
+		      });
+		    }
 		},
 		created(){
 			this.goods_code = this.$route.params.id;
