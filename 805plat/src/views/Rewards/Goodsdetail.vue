@@ -62,7 +62,7 @@
 			async getuserbaseinfo(){
 				let res = await this.$post(this.$api.getuserbaseinfo,"");
 				if(res && res._status == '200'){
-					if(!res.userExt.address && !res.userExt.phone){
+					if(!res.userExt.address || !res.userExt.phone){
 						this.$createDialog({
 					        type: 'alert',
 					        icon: 'cubeic-wrong',
@@ -116,8 +116,9 @@
 				}
 			},
 			luckyDraw:function(){//兑换
-				if(!this.getuserbaseinfo()) return false;
-				this.isCheck();
+				if(this.getuserbaseinfo()){
+					this.isCheck();
+				};
 			}
 		},
 		created(){

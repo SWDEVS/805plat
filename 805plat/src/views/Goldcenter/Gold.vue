@@ -153,22 +153,18 @@
 			    }
 			    return total <= 0 ? 0 : (Math.round(num / total * 10000) / 100.00);
 			},
-			async wxstart() {
-		        let that = this;
-			    let config = await that.getwxconfig();
-			    await that.setwxconfig(config);
-		    },
 		    toShare:function(){
-		    	let that = this;
-			    that.$wx.updateAppMessageShareData({ 
-			      title: '1111', // 分享标题
-			      desc: '1111', // 分享描述
-			      link: "https://m.805.com", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-			      imgUrl: '', // 分享图标
-			      success: function () {// 设置成功
-			      	
-			      }
-			    })
+		    	this.$createDialog({
+			        type: 'alert',
+			        icon: 'cubeic-warn',
+			        showClose: true,
+			        title: '提示',
+			        content:'请在公众号“积分获得”中打开并分享“满贯捕鱼体验版”',
+			        onConfirm: () => {
+			        	this.share();
+			        	this.$wx.closeWindow();
+			        }
+			     }).show()
 		    },
 		    async share() {
 		        let config = await this.$get(this.$api.share, "");
@@ -194,7 +190,6 @@
 			this.getuserinfo();
 			this.getsignlist();
 			this.getActivelist();
-			this.wxstart();
 		},
 		mounted(){
 
