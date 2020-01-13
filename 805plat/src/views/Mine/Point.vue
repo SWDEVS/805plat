@@ -46,9 +46,9 @@
                     <ListItem
                       v-for="(recorditem,index) in item.list"
                       :key="index"
-                      :title="recorditem.name"
-                      :time="recorditem.time"
-                      :num="recorditem.num"
+                      :title="recorditem.reason"
+                      :time="recorditem.add_time"
+                      :num="recorditem.ticket"
                     ></ListItem>
                   </template>
                 </cube-scroll>
