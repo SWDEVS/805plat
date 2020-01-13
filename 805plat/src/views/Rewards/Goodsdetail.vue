@@ -76,7 +76,7 @@
 					    }).show();
 					    return false;
 					}
-					return true;
+					this.isCheck();
 				}
 			},
 			async isCheck(){
@@ -142,9 +142,7 @@
 				}
 			},
 			luckyDraw:function(){//兑换
-				if(this.getuserbaseinfo()){
-					this.isCheck();
-				};
+				this.getuserbaseinfo();
 			},
 			async createorder(product_id,product_type) {
 				let that=this;
