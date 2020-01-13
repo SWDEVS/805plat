@@ -186,10 +186,12 @@ export default {
         type: "txt"
       });
       this.toast.show();
-      this.incomepage = 1;
-      this.tabs[0].list.length = 0;
-      let incomelist =await this.getincomelist(); //刷新列表
-      this.tabs[0].list = incomelist.list;     
+      if(msg==="充值成功"){
+        this.incomepage = 1;
+        this.tabs[0].list.length = 0;
+        let incomelist =await this.getincomelist(); //刷新列表
+        this.tabs[0].list = incomelist.list;  
+      }        
     }
   }
 };
