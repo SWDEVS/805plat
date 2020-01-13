@@ -89,7 +89,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .set_con {
-  width: 668px;
+  width: $width-content;
   height: calc(100% - 22px);
   background: #fff;
   border-radius: $size-radius;
