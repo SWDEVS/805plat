@@ -137,7 +137,7 @@
 	height: calc(100vh - 214px);
 	overflow: auto;
 	.card_list{
-		width: 650px;
+		width: $width-content;
 		border-radius: $size-radius;
 		background: #fff;
 		margin: 0 auto;
@@ -170,7 +170,7 @@
 		}
 	}
 	.goods_list{
-		width: 650px;
+		width: $width-content;
 		border-radius: $size-radius;
 		background: #fff;
 		margin: 0 auto;
