@@ -147,7 +147,7 @@ export function showToastTxtOnly(txt,type,time,func){
     time: time,
     $events: {
       timeout: () => {
-        func()
+        //func()
       }
     }
   })
