@@ -32,6 +32,7 @@
 								</div>
 							</div>
 							<div class="day_c">
+								<div class="loading" v-if="item.status == 2"></div>
 								<p :class="[item.status == 1 ? 'active':'','num']">{{item.send_num}}</p>
 								<div class="reward">
 									<i class="finished" v-if="item.status == 1"></i>
@@ -320,6 +321,89 @@
 					padding-top: 8px;
 					text-align: center;
 					margin-bottom: 11px;
+					position: relative;
+					.loading{
+						width: 120px;
+						height: 140px;
+						animation: move 1s infinite;
+						position: absolute;
+						left: -20px;
+						top: -20px;
+					}
+					@keyframes move{	
+						0%{
+							background: url('assets/images/Gold/jb_light_01.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						6%{
+							background: url('assets/images/Gold/jb_light_02.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						12%{
+							background: url('assets/images/Gold/jb_light_03.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						18%{
+							background: url('assets/images/Gold/jb_light_04.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						24%{
+							background: url('assets/images/Gold/jb_light_05.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						30%{
+							background: url('assets/images/Gold/jb_light_06.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						36%{
+							background: url('assets/images/Gold/jb_light_07.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						42%{
+							background: url('assets/images/Gold/jb_light_08.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						48%{
+							background: url('assets/images/Gold/jb_light_09.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						56%{
+							background: url('assets/images/Gold/jb_light_10.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						62%{
+							background: url('assets/images/Gold/jb_light_11.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						68%{
+							background: url('assets/images/Gold/jb_light_12.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						74%{
+							background: url('assets/images/Gold/jb_light_13.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						80%{
+							background: url('assets/images/Gold/jb_light_14.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						86%{
+							background: url('assets/images/Gold/jb_light_15.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						92%{
+							background: url('assets/images/Gold/jb_light_16.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						97%{
+							background: url('assets/images/Gold/jb_light_17.png') no-repeat;
+							background-size: 100% 100%;
+						}
+						100%{
+							background: url('assets/images/Gold/jb_light_18.png') no-repeat;
+							background-size: 100% 100%;
+						}
+					}
 					.num{
 						font-size: 22px;
 						color: #5f5f5f;
