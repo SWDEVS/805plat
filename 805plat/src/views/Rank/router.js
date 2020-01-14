@@ -6,6 +6,5 @@ export default [
         component: Rank,
         meta: {
             sort: 3001,
-            auth: false,
         },
     },]

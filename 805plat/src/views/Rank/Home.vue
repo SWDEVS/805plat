@@ -2,7 +2,7 @@
   <div>
     <Xheader title="排行榜" :back="false" right="iconquestion"></Xheader>
     <Xcont :header="true">
-      <template>
+
         <cube-tab-bar class="tab-rank" v-model="selectedLabel" show-slider inline>
           <cube-tab v-for="(item) in tabs" :label="item.label" :key="item.label">
             <i slot="icon" class="tab-icon" :class="item.icon"></i>
@@ -27,7 +27,7 @@
             </ul>
           </cube-tab-panel>
         </cube-tab-panels>
-      </template>
+     
     </Xcont>
   </div>
 </template>
@@ -141,7 +141,6 @@ export default {
   height: 30px;
   align-content: center;
   text-align: center;
-  font-size: 14px;
 
   &-item {
     flex: 1;

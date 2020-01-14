@@ -9,7 +9,8 @@ module.exports = {
       stylus: {
         'resolve url': true,
         'import': [
-          './src/theme'
+          './src/theme',
+          './src/assets/styles/var'
         ]
       }
     }
@@ -24,13 +25,24 @@ module.exports = {
   chainWebpack: config => {
     config.resolve.alias
       .set("@", resolve("./src"))
-    // .set("assets", resolve("src/assets"))
+      .set("assets", resolve("src/assets"))
     // .set("components", resolve("src/components"))
     // .set("base", resolve("baseConfig"))
     // .set("public", resolve("public"));
   },
-  devServer:{
+  devServer: {
     disableHostCheck: true,
-    port:8100
+    port: 8100,
+    proxy: {
+      '/': {
+        'ws': false,
+        'target': 'https://m.805.com/',
+        "secure": false,
+        'changeOrigin': true,
+        'pathRewrite': {
+          '^': '',
+        },
+      },
+    },
   }
 }

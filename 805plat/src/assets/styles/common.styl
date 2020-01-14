@@ -1,12 +1,68 @@
+@require './var.styl';
 
-*{
+* {
     box-sizing: border-box;
 }
 
-// html,body{
-//     font-size:14px;
-// }
+html, body {
+    font-size: 30px;
+    background: $color-bg;
+    height: 100%;
+}
 
-// .cube-btn+.cube-btn{
-//     margin-top 10px;
-// }
+.container {
+    background: #fff;
+    border-radius: $size-radius;
+    width: $width-content;
+    margin: $padding-s auto;
+    height: calc(100% - 20px);
+}
+
+.tab-container {
+    width: 100%;
+    padding: $padding-m;
+
+    .iconfont {
+        font-size: $size-xl;
+        margin-right: $padding-s;
+        margin-bottom: $padding-m;
+    }
+
+    .tab-title {
+        font-size: $size-m;
+        margin-bottom: $padding-m;
+    }
+}
+
+/*单行文本省略*/
+.ellipsis{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
+}
+/*清除浮动*/
+.clearfix:before,.clearfix:after {
+    display: table;
+    content: "";    /*不用有内容也可以*/
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+}
+.list-block {
+    width: $width-content;
+    margin: $padding-m auto;
+    background: #fff;
+    border-radius: $size-radius;
+}
+
+
+.txt-danger{
+    color:  $color-regular-blue;
+}
+
+.txt-success{
+    color :#5cb85c
+}

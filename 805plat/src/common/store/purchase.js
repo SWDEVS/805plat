@@ -1,18 +1,18 @@
 const state = {
-	activeTab: "",
+	status: false,
 }
 
 const actions = {
-	_setActiveTab({
+	_showPurchase({
 		commit
 	}, active) {		
-		commit('@tabs/activeTab', active)
+		commit('@purchase/status', active)
 	},
 }
 
 const mutations = {
-	'@tabs/activeTab'(state, data) {
-		state.activeTab = data
+	'@purchase/status'(state, data) {
+		state.status = data
 	},
 }
 

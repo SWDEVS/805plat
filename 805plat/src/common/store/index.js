@@ -1,18 +1,19 @@
 import Vuex from 'vuex'
 import VuexPersistence from 'vuex-persist'
 import Vue from 'vue'
-import tabs from './tabs.js'
 import user from './user.js'
+import purchase from './purchase.js'
+import baseinfo from './base.js'
 
 Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
 	storage: window.localStorage,
 	// 要持久化的模块列表。
-	modules: [user],
+	modules: ['user','baseinfo'],
 })
 
 export default new Vuex.Store({
-	modules: { tabs, user },
+	modules: { user,purchase,baseinfo },
 	plugins: [vuexLocal.plugin],
 })

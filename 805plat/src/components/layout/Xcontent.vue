@@ -1,5 +1,5 @@
 <template>
-  <div class="x-cont" :style="`top: ${top}px; height: ${height}; `">
+  <div class="x-cont" :style="`padding-top: ${margintop}; `">
     <slot></slot>
   </div>
 </template>
@@ -20,21 +20,17 @@ export default {
   },
 
   computed: {
-    top() {
-      return this.header ? 50 : 0;
-    },
-    height() {
-      return `calc(100vh - ${this.top}px)`;
+    margintop(){
+       return this.header?'12.5vw':0;
     }
   }
 };
 </script>
 <style lang="stylus" scope>
 .x-cont {
-  position: absolute;
   width: 100vw;
   overflow-x: hidden;
   overflow-y: auto;
-  font-size: 14px;
+  height: 100vh;
 }
 </style>
