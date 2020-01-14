@@ -8,6 +8,7 @@ import Realname from '@/views/Mine/Realname.vue'
 import Bean from '@/views/Mine/Bean.vue'
 import Point from '@/views/Mine/Point.vue'
 import Couponcode from '@/views/Mine/Couponcode.vue'
+import CouponUsed from '@/views/Mine/CouponUsed.vue'
 import PurchaseDetail from '@/views/Mine/PurchaseDetail.vue'
 export default [
     {
@@ -85,6 +86,13 @@ export default [
         path: '/mine/Couponcode/:sn/:sname/:cname',
         name: 'Couponcode',
         component: Couponcode,
+        meta: {
+        },
+    },
+    {
+        path: '/mine/CouponUsed/:sn/:sname/:cname',
+        name: 'CouponUsed',
+        component: CouponUsed,
         meta: {
         },
     },

@@ -17,7 +17,8 @@ const api = {
     cates:baseUrl+"/gameshop/cates",//获取商品分类
     list:baseUrl+"/gameshop/list",//获取商品列表
     goodsdetail:baseUrl+"/gameshop/detail",//获取商品详情
-    convertgoods:baseUrl+"/gameshop/convertgoods",//商品兑换
+    convertgoods:baseUrl+"/gameshop/convertgoods",//商品兑换    
+    getcoupondetail:baseUrl+"/gameshop/getcoup",//优惠券详情
     convertgoodsExchange:baseUrl+"/gameshop/convertgoods2",//商品兑换
     listhot:baseUrl+"/gameshop/listhot",//热门商品  
     getwxconfig:baseUrl+"/weixin/share",//获取微信jssdk config

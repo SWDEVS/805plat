@@ -21,6 +21,7 @@
 import Xheader from "@/components/layout/Xheader.vue";
 import Xcont from "@/components/layout/Xcontent.vue";
 import QRCode from "qrcode";
+let scanlisten;
 export default {
   name: "Couponcode",
   components: {
@@ -36,25 +37,21 @@ export default {
     };
   },
   created() {
-    //if (this.$route.params.sn) {
-      let { sn, sname, cname } = this.$route.params;
-      let coupon = {
-        sn,
-        sname,
-        cname
-      };
-      this.sn = sn;
-      this.sname = sname;
-      this.cname = cname;
-      localStorage.setItem("coupon", JSON.stringify(coupon));
-      this.createqrcode(sn);
-    // } else {
-    //   let { sn, sname, cname } = JSON.parse(localStorage.getItem("coupon"));
-    //   this.sn = sn;
-    //   this.sname = sname;
-    //   this.cname = cname;
-    //   this.createqrcode(sn);
-    // }
+    let { sn, sname, cname } = this.$route.params;
+    let coupon = {
+      sn,
+      sname,
+      cname
+    };
+    this.sn = sn;
+    this.sname = sname;
+    this.cname = cname;
+    localStorage.setItem("coupon", JSON.stringify(coupon));
+    this.createqrcode(sn);
+    this.scanlistener();
+  },
+  destroyed() {
+    clearInterval(scanlisten);
   },
   computed: {},
   methods: {
@@ -66,6 +63,28 @@ export default {
         .catch(err => {
           console.error(err);
         });
+    },
+    async getcoupondetail() {
+      let param = {
+        sn: this.sn
+      };
+      let coupon = await this.$get(this.$api.getcoupondetail, param);
+      return coupon;
+    },
+    scanlistener() {
+      scanlisten = setInterval(async () => {
+        let coupon = await this.getcoupondetail();
+        if (coupon.status == 2) {
+          this.$router.replace({
+            name: "CouponUsed",
+            params: {
+              sn: this.sn,
+              sname: this.sname,
+              cname: this.cname
+            }
+          });
+        }
+      }, 1000);
     }
   }
 };
@@ -104,8 +123,9 @@ export default {
       width: 500px;
       margin: 40px auto 0;
       text-align: center;
-      p:first-child{
-          margin-bottom $padding-s;
+
+      p:first-child {
+        margin-bottom: $padding-s;
       }
     }
   }
