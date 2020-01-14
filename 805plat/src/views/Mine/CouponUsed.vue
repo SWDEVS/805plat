@@ -9,6 +9,7 @@
           <div class="qrcode-tip">
             <p>优惠券使用成功！</p>
           </div>
+          <div class="btn-back" @click="backtocouponlist"></div>
         </div>
       </div>
     </Xcont>
@@ -32,7 +33,6 @@ export default {
     };
   },
   created() {
-   
     let { sn, sname, cname } = this.$route.params;
     let coupon = {
       sn,
@@ -43,10 +43,15 @@ export default {
     this.sname = sname;
     this.cname = cname;
     localStorage.setItem("coupon", JSON.stringify(coupon));
-   
   },
   computed: {},
-  methods: {}
+  methods: {
+    backtocouponlist() {
+      this.$router.replace({
+        name: "Coupon"
+      });
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
@@ -72,7 +77,7 @@ export default {
 
     .coupon-name {
       width: 100%;
-      height 100px;
+      height: 100px;
       text-align: center;
       font-size: $size-xl;
       margin-bottom: $padding-m;
@@ -82,10 +87,14 @@ export default {
       width: 500px;
       margin: 40px auto 0;
       text-align: center;
+    }
 
-      p:first-child {
-        margin-bottom: $padding-s;
-      }
+    .btn-back {
+      width: 520px;
+      height: 112px;
+      margin: 19px auto 0;
+      opacity: 0;
+      cursor: pointer;
     }
   }
 }
