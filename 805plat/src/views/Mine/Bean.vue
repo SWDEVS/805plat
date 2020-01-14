@@ -45,7 +45,7 @@
                     <ListItem
                       v-for="(recorditem,index) in item.list"
                       :key="index"
-                      :title="recorditem.game_name"
+                      :title="recorditem.reason"
                       :time="recorditem.add_time"
                       :num="recorditem.ingot"
                     ></ListItem>
