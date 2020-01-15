@@ -12,7 +12,8 @@
     		</div>
     		<p>收货地址:</p>
     		<div class="box">
-    			<cube-textarea v-model="address" :autoExpand="true" @blur="handleBlur" placeholder="请输入联系地址"></cube-textarea>
+    			<!-- <cube-textarea v-model="address" :autoExpand="true" @blur="handleBlur" placeholder="请输入联系地址"></cube-textarea> -->
+    			<textarea v-model="address" :autoExpand="true" @blur="handleBlur" placeholder="请输入联系地址"></textarea>
     		</div>
     		<cube-checkbox v-model="checked">
 			   保存地址
@@ -156,7 +157,13 @@ export default {
 			}
 			textarea{
 				font-size: 24px;
+				height: 100px;
+				color: #666;
 				resize: none;
+				width: 100%;
+				border: 1px solid #eee;
+				outline: none;
+				-webkit-appearance: none;
 			}
 		}
 		.btn{
