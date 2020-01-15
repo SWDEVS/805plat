@@ -84,7 +84,7 @@
 					let _this = this;
 					if(res.pay_money && res.pay_money != ''){
 				    	this.openDialog('error','积分不足',`您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,function(){
-					        _this.createorder(this.goods_detail.goods_id,4);
+					        _this.createorder(_this.goods_detail.goods_id,4);
 				    	});
 					}else{
 					    this.openDialog('warn','提示',`兑换将花费"${this.goods_detail.use_num}积分"`,function(){
