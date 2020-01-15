@@ -24,6 +24,7 @@
 		            <p>5. 京东E卡的其他规则以京东所公示的内容为准。</p>
 		        </div>
 			</div>
+			<cubePop content="京东E卡" :infomation="info" ref="extendPopup"></cubePop>
 		</Xcont>
 	</div>
 	
@@ -32,11 +33,19 @@
 	import Xheader from "@/components/layout/Xheader.vue";
 	import Xcont from "@/components/layout/Xcontent.vue";
 	import { showToastTxtOnly } from "@/common/plugins/filters.js";
+	import cubePop from "@/views/Rewards/Phonewin.vue";
 	export default{
 		name:"Phonetraffic",
 		data(){
 			return {
-			    goodsList:[]
+			    goodsList:[],
+			    info:{
+			    	user_id:'',//用户id
+			    	phone:'',//手机号
+			    	goods_code:'',
+			    	goods_price:'',
+			    	use_num:''
+			    }
 			}
 		},
 		methods:{
@@ -52,16 +61,10 @@
 				let res = await this.$post(this.$api.getuserbaseinfo,"");
 				if(res && res._status == '200'){
 					if(!res.userExt.phone){
-						this.$createDialog({
-					        type: 'alert',
-					        icon: 'cubeic-wrong',
-					        showClose: true,
-					        title: '尚未绑定手机号',
-					        content:'是否前往完善账号?',
-					        onConfirm: () => {
-					        	this.$router.push('/mine/setting');
-					        }
-					    }).show();
+					    let _this = this;
+				    	this.openDialog('error','未绑定手机号','是否前往完善账号?',function(){
+				    		_this.$router.push('/mine/setting');
+				    	});
 					    return false;
 					}
 					this.isCheck(item);
@@ -78,40 +81,16 @@
 					is_check: 1
 				});
 				if(res && res._status == '200'){
+					let _this = this;
 					if(res.pay_money && res.pay_money != ''){
-						this.$createDialog({
-					        type: 'confirm',
-					        icon: 'cubeic-info',
-					        title: '积分不足',
-					        content: `您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,
-					        confirmBtn: {
-					          text: '确定',
-					          active: true,
-					          disabled: false,
-					          href: 'javascript:;'
-					        },
-					        cancelBtn: {
-					          text: '取消',
-					          active: false,
-					          disabled: false,
-					          href: 'javascript:;'
-					        },
-					        onConfirm: () => {
-					        	this.createorder(item.goods_id,4)
-					        },
-					        onCancel: () => {}
-					    }).show()
+				    	this.openDialog('error','积分不足',`您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,function(){
+				    		_this.createorder(item.goods_id,4);
+				    	});
 					}else{
-						this.$createDialog({
-					        type: 'alert',
-					        icon: 'cubeic-right',
-					        showClose: true,
-					        title: "提示",
-					        content: `兑换将花费"${item.use_num}积分"`,
-					        onConfirm: () => {
-					        	this.confirmGoods(item);
-					        }
-					    }).show();
+				  		this.info.goods_code = item.goods_code;
+						this.info.goods_price = item.goods_price;
+						this.info.use_num = item.use_num;
+						this.$refs.extendPopup.show();
 					}
 				}
 			},
@@ -122,16 +101,10 @@
 					usenum: item.use_num,
 				});
 				if(res && res._status == '200'){
-					this.$createDialog({
-				        type: 'alert',
-				        icon: 'cubeic-right',
-				        showClose: true,
-				        title: "提交成功",
-				        content: "商品将在1-3个工作日发送给您,请到'商品订单记录'中查看物流信息",
-				        onConfirm: () => {
-				        	this.$router.push('/order/Orderlist');
-				        }
-				    }).show();
+					let _this = this;
+					this.openDialog('success','提交成功',"商品将在1-3个工作日发送给您,请到'商品订单记录'中查看物流信息",function(){
+			    		_this.$router.push('/order/Orderlist');
+			    	});
 				}
 			},
 			async createorder(product_id,product_type) {
@@ -162,7 +135,8 @@
 		},
 		components: {
 			Xheader,
-			Xcont
+			Xcont,
+			cubePop
 		}
 	}
 	

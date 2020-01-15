@@ -86,16 +86,10 @@ export default {
         	});
         	if(res && res._status == '200'){
         		this.hide();
-        		this.$createDialog({
-			        type: 'alert',
-			        icon: 'cubeic-right',
-			        showClose: true,
-			        title: "提交成功",
-			        content: "商品将在1-3个工作日发送给您,请到'商品订单记录'中查看物流信息",
-			        onConfirm: () => {
-			        	this.$router.push('/order/Orderlist');
-			        }
-			    }).show();
+			    let _this = this;
+		    	this.openDialog('success','提交成功',"商品将在1-3个工作日发送给您,请到'商品订单记录'中查看物流信息",function(){
+		    		_this.$router.push('/order/Orderlist');
+		    	});
         	}
         }
     }

@@ -31,13 +31,15 @@
 									<span>{{item.content}}</span>
 								</div>
 							</div>
-							<div class="day_c">
-								<div class="loading" v-if="item.status == 2"></div>
-								<p :class="[item.status == 1 ? 'active':'','num']">{{item.send_num}}</p>
-								<div class="reward">
-									<i class="finished" v-if="item.status == 1"></i>
-									<i :class="bindCladdName[item.send_type]" v-else-if="item.status == 2" @click="sign(item.sign)"></i>
-									<i :class="bindCladdName[item.send_type]" v-else></i>
+							<div class="day_con">
+								<div class="loading" v-if="item.status == 2" @click="sign(item.sign)"></div>
+								<div class="day_c">
+									<p :class="[item.status == 1 ? 'active':'','num']">{{item.send_num}}</p>
+									<div class="reward">
+										<i class="finished" v-if="item.status == 1"></i>
+										<i :class="bindCladdName[item.send_type]" v-else-if="item.status == 2"></i>
+										<i :class="bindCladdName[item.send_type]" v-else></i>
+									</div>
 								</div>
 							</div>
 							<div class="day_b">
@@ -125,14 +127,7 @@
 					id: id
 				});
 				if (res && res._status == '200') {
-					this.$createDialog({
-				        type: 'alert',
-				        icon: 'cubeic-right',
-				        showClose: true,
-				        title: '提示',
-				        content:'签到成功',
-				        onConfirm: () => {}
-				     }).show()
+					this.openDialog('success','签到成功');
 					this.getuserinfo();
 					this.getsignlist();
 				}
@@ -155,23 +150,11 @@
 			    return total <= 0 ? 0 : (Math.round(num / total * 10000) / 100.00);
 			},
 		    toShare:function(){
-		    	this.$createDialog({
-			        type: 'alert',
-			        icon: 'cubeic-warn',
-			        showClose: true,
-			        title: '提示',
-			        content:'请在公众号“积分获得”中打开并分享“满贯捕鱼体验版”',
-			        confirmBtn: {
-			            text: '前往分享',
-			            active: true,
-			            disabled: false,
-			            href: 'javascript:;'
-			        },
-			        onConfirm: () => {
-			        	this.share();
-			        	this.$wx.closeWindow();
-			        }
-			     }).show()
+		    	let _this = this;
+		    	this.openDialog('warn','','请在公众号“积分获得”中打开并分享“满贯捕鱼体验版”',function(){
+		    		_this.share();
+			        _this.$wx.closeWindow();
+		    	});
 		    },
 		    async share() {
 		        let config = await this.$post(this.$api.share, "");
@@ -181,14 +164,7 @@
 		    		id:id
 		    	});
 		    	if (res && res._status == '200') {
-					this.$createDialog({
-				        type: 'alert',
-				        icon: 'cubeic-right',
-				        showClose: true,
-				        title: '提示',
-				        content:'领取成功',
-				        onConfirm: () => {}
-				     }).show();
+					this.openDialog('success','领取成功');
 					this.getActivelist();
 					this.getuserinfo();
 				}
@@ -313,18 +289,15 @@
 						}
 					}
 				}
-				.day_c{
+				.day_con{
 					width: 80px;
 					height: 100px;
-					background: #eee;
-					border-radius: 10px;
-					padding-top: 8px;
-					text-align: center;
-					margin-bottom: 11px;
 					position: relative;
+					margin-bottom: 11px;
 					.loading{
 						width: 120px;
 						height: 140px;
+						background-size: 100% 100%;
 						animation: move 1s infinite;
 						position: absolute;
 						left: -20px;
@@ -404,49 +377,57 @@
 							background-size: 100% 100%;
 						}
 					}
-					.num{
-						font-size: 22px;
-						color: #5f5f5f;
-						margin-bottom: 11px;
-					}
-					.active{
-						color: #acacac;
-					}
-					.reward{
-						height: 45px;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						.finished{
-							display: block;
-							width: 45px;
+					.day_c{
+						width: 80px;
+						height: 100px;
+						background: #eee;
+						border-radius: 10px;
+						padding-top: 8px;
+						text-align: center;
+						.num{
+							font-size: 22px;
+							color: #5f5f5f;
+							margin-bottom: 11px;
+						}
+						.active{
+							color: #acacac;
+						}
+						.reward{
 							height: 45px;
-							background: url('assets/images/Gold/jb_icon_ylq.png') no-repeat;	
-							background-size: 100% 100%;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							.finished{
+								display: block;
+								width: 45px;
+								height: 45px;
+								background: url('assets/images/Gold/jb_icon_ylq.png') no-repeat;	
+								background-size: 100% 100%;
+							}
+							.yuan{
+								display: block;
+								width: 43px;
+								height: 38px;
+								background: url('assets/images/Gold/jb_icon_yb.png') no-repeat;	
+								background-size: 100% 100%;
+							}
+							.point{
+								display: block;
+								width: 46px;
+								height: 38px;
+								background: url('assets/images/Gold/jb_icon_jf.png') no-repeat;	
+								background-size: 100% 100%;
+							}
+							.ticket{
+								display: block;
+								width: 42px;
+								height: 37px;
+								background: url('assets/images/Gold/jb_icon_yhq.png') no-repeat;	
+								background-size: 100% 100%;
+							}
 						}
-						.yuan{
-							display: block;
-							width: 43px;
-							height: 38px;
-							background: url('assets/images/Gold/jb_icon_yb.png') no-repeat;	
-							background-size: 100% 100%;
-						}
-						.point{
-							display: block;
-							width: 46px;
-							height: 38px;
-							background: url('assets/images/Gold/jb_icon_jf.png') no-repeat;	
-							background-size: 100% 100%;
-						}
-						.ticket{
-							display: block;
-							width: 42px;
-							height: 37px;
-							background: url('assets/images/Gold/jb_icon_yhq.png') no-repeat;	
-							background-size: 100% 100%;
-						}
+						
 					}
-					
 				}
 				.day_b{
 					text-align: center;

@@ -64,16 +64,10 @@
 				let res = await this.$post(this.$api.getuserbaseinfo,"");
 				if(res && res._status == '200'){
 					if(!res.userExt.address || !res.userExt.phone){
-						this.$createDialog({
-					        type: 'alert',
-					        icon: 'cubeic-wrong',
-					        showClose: true,
-					        title: '尚未绑定手机号和联系地址',
-					        content:'是否前往完善账号?',
-					        onConfirm: () => {
-					        	this.$router.push('/mine/setting');
-					        }
-					    }).show();
+						let _this = this;
+				    	this.openDialog('error','未绑定手机号和联系地址','是否前往完善账号?',function(){
+					        _this.$router.push('/mine/setting');
+				    	});
 					    return false;
 					}
 					this.isCheck();
@@ -87,40 +81,15 @@
 					is_check: 1
 				});
 				if(res && res._status == '200'){
+					let _this = this;
 					if(res.pay_money && res.pay_money != ''){
-						this.$createDialog({
-					        type: 'confirm',
-					        icon: 'cubeic-info',
-					        title: '积分不足',
-					        content: `您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,
-					        confirmBtn: {
-					          text: '确定',
-					          active: true,
-					          disabled: false,
-					          href: 'javascript:;'
-					        },
-					        cancelBtn: {
-					          text: '取消',
-					          active: false,
-					          disabled: false,
-					          href: 'javascript:;'
-					        },
-					        onConfirm: () => {
-					        	this.createorder(this.goods_detail.goods_id,4)
-					        },
-					        onCancel: () => {}
-					      }).show()
+				    	this.openDialog('error','积分不足',`您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,function(){
+					        _this.createorder(this.goods_detail.goods_id,4);
+				    	});
 					}else{
-						this.$createDialog({
-					        type: 'alert',
-					        icon: 'cubeic-right',
-					        showClose: true,
-					        title: "提示",
-					        content: `兑换将花费"${this.goods_detail.use_num}积分"`,
-					        onConfirm: () => {
-					        	this.confirmGoods();
-					        }
-					    }).show();
+					    this.openDialog('warn','提示',`兑换将花费"${this.goods_detail.use_num}积分"`,function(){
+					        _this.confirmGoods();
+				    	});
 					}
 				}
 			},
