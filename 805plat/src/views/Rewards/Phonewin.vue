@@ -4,7 +4,7 @@
     		<div class="title">{{content}}</div>
     		<p>手机号码:</p>
     		<div class="box">
-    			<cube-input v-model="phone" placeholder="请输入手机号码" type="number" :maxlength="11"></cube-input>
+    			<cube-input v-model="phone" @blur="handleBlur" placeholder="请输入手机号码" type="number" :maxlength="11"></cube-input>
     		</div>
     		<p class="tip">此次兑换将花费"<span>{{use_num | formatNumberRgx}}积分</span>"</p>
 			<div class="btn">
@@ -56,6 +56,10 @@ export default {
             this.$refs.popup.hide()
             this.$emit('hide')
         },
+        handleBlur:function() {
+		    document.body.scrollTop = 0;
+		    document.documentElement.scrollTop = 0;
+		},
         checkForm:function(){
         	if(this.phone == ''){
 				this.toast = this.$createToast({
