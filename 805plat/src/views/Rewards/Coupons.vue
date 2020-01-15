@@ -74,7 +74,7 @@ export default {
 	height: calc(100vh - 214px);
 	overflow: auto;
 	.shop_coupon{
-		width: 650px;
+		width: $width-content;
 		height: 200px;
 		border-radius: $size-radius;
 		background: #fff;

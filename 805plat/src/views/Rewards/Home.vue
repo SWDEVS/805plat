@@ -88,5 +88,9 @@ export default {
 <style lang="stylus" scoped>
 .container {
   background-color: #eee;
+
+  .tab-container {
+    padding: $padding-m 0;
+  }
 }
 </style>
