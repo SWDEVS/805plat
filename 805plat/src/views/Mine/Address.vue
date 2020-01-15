@@ -55,7 +55,7 @@ export default {
 			        type: 'txt',
 			        time: 1000,
 			        onTimeout: () => {
-			          this.$router.push("/mine/setting");
+			          this.$router.replace("/mine/setting");
 			        }
 			    })
 			    this.toast.show();
