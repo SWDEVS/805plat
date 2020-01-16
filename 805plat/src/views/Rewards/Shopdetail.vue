@@ -126,44 +126,20 @@ export default {
         });
         if (res && res._status == '200'){
         	if(res.pay_money && res.pay_money != ''){
-        		 this.$createDialog({
-			        type: 'confirm',
-			        icon: 'cubeic-info',
-			        title: '积分不足',
-			        content: `您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,
-			        confirmBtn: {
-			          text: '确定',
-			          active: true,
-			          disabled: false,
-			          href: 'javascript:;'
-			        },
-			        cancelBtn: {
-			          text: '取消',
-			          active: false,
-			          disabled: false,
-			          href: 'javascript:;'
-			        },
-			        onConfirm: () => {
-			        	this.createorder(id,3)
-			        },
-			        onCancel: () => {}
-			      }).show()
+        		let _this = this;
+        		this.openDialog('error','积分不足',`您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,function(){
+			  		_this.createorder(id,3)
+			  	});
         	}else{
         		this.goCouponlist();
         	}
         }
     },
     goCouponlist:function(){
-    	this.$createDialog({
-	        type: 'alert',
-	        icon: 'cubeic-right',
-	        showClose: true,
-	        title: '优惠券领取成功',
-	        content:'是否前往优惠券列表查看?',
-	        onConfirm: () => {
-	        	this.$router.push('/mine/Coupon');
-	        }
-	     }).show();
+    	let _this = this;
+	  	this.openDialog('success','优惠券领取成功','是否前往优惠券列表查看?',function(){
+	  		_this.$router.push('/mine/Coupon')
+	  	});
     },
     line2br:function(text) {
 		return text.split('\n').join('<br/>');

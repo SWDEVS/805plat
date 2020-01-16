@@ -165,7 +165,7 @@
 			background-size: 100% 100%;
 		}
 		.card_4{
-			background: url('assets/images/Rewards/02.png') no-repeat;
+			background: url('assets/images/Rewards/moive.png') no-repeat;
 			background-size: 100% 100%;
 		}
 	}

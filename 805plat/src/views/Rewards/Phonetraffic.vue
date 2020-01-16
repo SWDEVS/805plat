@@ -99,16 +99,10 @@
 				let res = await this.$post(this.$api.getuserbaseinfo,"");
 				if(res && res._status == '200'){
 					if(!res.userExt.phone){
-						this.$createDialog({
-					        type: 'alert',
-					        icon: 'cubeic-wrong',
-					        showClose: true,
-					        title: '尚未绑定手机号',
-					        content:'是否前往完善账号?',
-					        onConfirm: () => {
-					        	this.$router.push('/mine/setting');
-					        }
-					    }).show();
+					    let _this = this;
+				    	this.openDialog('error','未绑定手机号','是否前往完善账号?',function(){
+				    		_this.$router.push('/mine/setting');
+				    	});
 					    return false;
 					}
 					this.isCheck(item);
@@ -126,28 +120,10 @@
 				});
 				if(res && res._status == '200'){
 					if(res.pay_money && res.pay_money != ''){
-						this.$createDialog({
-					        type: 'confirm',
-					        icon: 'cubeic-info',
-					        title: '积分不足',
-					        content: `您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,
-					        confirmBtn: {
-					          text: '确定',
-					          active: true,
-					          disabled: false,
-					          href: 'javascript:;'
-					        },
-					        cancelBtn: {
-					          text: '取消',
-					          active: false,
-					          disabled: false,
-					          href: 'javascript:;'
-					        },
-					        onConfirm: () => {
-					        	this.createorder(item.goods_id,4)
-					        },
-					        onCancel: () => {}
-					      }).show()
+						let _this = this;
+				    	this.openDialog('error','积分不足',`您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,function(){
+				    		_this.createorder(item.goods_id,4);
+				    	});
 					}else{
 						this.info.goods_code = item.goods_code;
 						this.info.goods_price = item.goods_price;

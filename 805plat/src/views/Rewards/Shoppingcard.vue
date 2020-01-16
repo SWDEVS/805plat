@@ -6,7 +6,7 @@
 		        <div class="cont_box clearfix">
 		        	<ul class="clearfix">
 		        		<li v-for="(item,index) in goodsList">
-		        			<div class="imgs" @click="goDetail(item.goods_code)">
+		        			<div class="imgs" @click="exchangeGoods(item)">
 		        				<div class="title">剩{{item.surplus_num}}份</div>
 		        				<p class="reward">{{Number(item.goods_price)}}<i>元</i></p>
 		        				<div class="point">{{item.use_num | formatNumberRgx}}积分</div>
@@ -30,6 +30,7 @@
 		            <p>6. 根据市场变化，将适时调整商城的兑奖规则、更换奖品清单或调整奖品数额以及本规则以外的其他内容，相关内容以官方网站最新公示为准。</p>
 		        </div>
 			</div>
+			<cubePop content="电影票" :infomation="info" ref="extendPopup"></cubePop>
 		</Xcont>
 	</div>
 	
@@ -37,11 +38,19 @@
 <script type="text/javascript">
 	import Xheader from "@/components/layout/Xheader.vue";
 	import Xcont from "@/components/layout/Xcontent.vue";
+	import cubePop from "@/views/Rewards/Phonewin.vue";
 	export default{
 		name:"Phonetraffic",
 		data(){
 			return {
-			    goodsList:[]
+			    goodsList:[],
+			    info:{
+			    	user_id:'',//用户id
+			    	phone:'',//手机号
+			    	goods_code:'',
+			    	goods_price:'',
+			    	use_num:''
+			    }
 			}
 		},
 		methods:{
@@ -55,14 +64,62 @@
 					this.goodsList = res.list;
 				}
 			},
-			goDetail:function(id){
-				 this.$router.push({
-	            	name:"Goodsdetail",
-	            	params:{
-	            		id: id
-	            	}
-	            });
+			async getuserbaseinfo(item){
+				let res = await this.$post(this.$api.getuserbaseinfo,"");
+				if(res && res._status == '200'){
+					if(!res.userExt.phone){
+					    let _this = this;
+				    	this.openDialog('error','未绑定手机号','是否前往完善账号?',function(){
+				    		_this.$router.push('/mine/setting');
+				    	});
+					    return false;
+					}
+					this.isCheck(item);
+				}
 			},
+			exchangeGoods:function(item){
+				this.getuserbaseinfo(item);
+			},
+			async isCheck(item){
+				let res = await this.$post(this.$api.convertgoods,{
+					code: item.goods_code,
+					price: item.goods_price,
+					usenum: item.use_num,
+					is_check: 1
+				});
+				if(res && res._status == '200'){
+					if(res.pay_money && res.pay_money != ''){
+					    let _this = this;
+				    	this.openDialog('error','积分不足',`您的积分还缺少${res.after_ticket}</br>需补足￥${res.pay_money}换购`,function(){
+				    		_this.createorder(item.goods_id,4);
+				    	});
+					}else{
+						this.info.goods_code = item.goods_code;
+						this.info.goods_price = item.goods_price;
+						this.info.use_num = item.use_num;
+						this.$refs.extendPopup.show();
+					}
+				}
+			},
+			async createorder(product_id,product_type) {
+				let that=this;
+		        let order = await this.createOrder(product_id,product_type);
+		        let orderconfig = await this.getorderconfig(order.orderno);
+		        if (orderconfig.data.jsApiParameters) {
+		          orderconfig = orderconfig.data.jsApiParameters;
+		        } else {
+		          showToastTxtOnly('创建订单失败');
+		          return;
+		        }
+		        this.payup(orderconfig, async function(res) {
+		        if (res.err_msg == "get_brand_wcpay_request:ok") {
+		            showToastTxtOnly('充值成功');
+		            that.exchangeGoods();
+		        } else {
+		            showToastTxtOnly('充值失败');
+		        }
+		      });
+		    }
 		},
 		created(){
 			this.getList();
@@ -72,7 +129,8 @@
 		},
 		components: {
 			Xheader,
-			Xcont
+			Xcont,
+			cubePop
 		}
 	}
 	

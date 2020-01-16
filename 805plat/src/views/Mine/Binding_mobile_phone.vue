@@ -19,30 +19,6 @@
 						</div>
 					</section>
 					<template v-else>
-					<!-- <section v-if="bindStatus">
-						<div class="set_child">
-							<div class="set_l">
-								<span>原手机号</span>
-							</div>
-							<div class="set_c">
-								<span>15951425609</span>
-							</div>
-						</div>
-						<div class="set_child">
-							<div class="set_l">
-								<span>短信验证码</span>
-							</div>
-							<div class="set_c">
-								<input type="number" name="" placeholder="请输入验证码">
-							</div>
-							<div class="set_r">
-								<cube-button :inline="true">获取验证码</cube-button>
-							</div>
-						</div>
-						<div class="btn">
-							<cube-button :primary="true">确 定</cube-button>
-						</div>
-					</section> -->
 					<section>
 						<div class="set_child">
 							<div class="set_l">
@@ -186,23 +162,17 @@ export default {
 			        type: 'txt',
 			        time: 1000,
 			        onTimeout: () => {
-			          this.$router.push("/mine/setting");
+			          this.$router.replace("/mine/setting");
 			        }
 			    })
 			    this.toast.show();
 			}
 	    },
 	    showClose:function() {
-		    this.$createDialog({
-		        type: 'alert',
-		        icon: 'cubeic-question',
-		        showClose: true,
-		        title: '提示',
-		        content:'确定更换手机号码吗?',
-		        onConfirm: () => {
-		        	this.status = !this.status;
-		        }
-		     }).show()
+	    	let _this = this;
+	    	this.openDialog('question','提示','确定更换手机号码吗?',function(){
+	    		_this.status = !_this.status;
+	    	});
     	}
 	},
 	created(){

@@ -4,21 +4,22 @@
     		<div class="title">收货信息</div>
     		<p>姓名:</p>
     		<div class="box">
-    			<cube-input v-model="name" placeholder="请输入姓名"></cube-input>
+    			<cube-input v-model="name" @blur="handleBlur" placeholder="请输入姓名"></cube-input>
     		</div>
     		<p>联系电话:</p>
     		<div class="box">
-    			<cube-input v-model="phone" placeholder="请输入联系电话" type="number" :maxlength="11"></cube-input>
+    			<cube-input v-model="phone" @blur="handleBlur" placeholder="请输入联系电话" type="number" :maxlength="11"></cube-input>
     		</div>
     		<p>收货地址:</p>
     		<div class="box">
-    			<cube-textarea v-model="address" :autoExpand="true" placeholder="请输入联系地址"></cube-textarea>
+    			<!-- <cube-textarea v-model="address" :autoExpand="true" @blur="handleBlur" placeholder="请输入联系地址"></cube-textarea> -->
+    			<textarea v-model="address" :autoExpand="true" @blur="handleBlur" placeholder="请输入联系地址"></textarea>
     		</div>
     		<cube-checkbox v-model="checked">
 			   保存地址
 			</cube-checkbox>
-			<div class="btn">
-				<cube-button :primary="true" @click="changeGoods()">确 定</cube-button>
+			<div class="btn" @click="changeGoods()">
+				<cube-button :primary="true">确 定</cube-button>
 			</div>
 			<i class="close" @click="hide()"></i>
     	</div>
@@ -67,6 +68,10 @@ export default {
             this.$refs.popup.hide()
             this.$emit('hide')
         },
+        handleBlur:function() {
+		    document.body.scrollTop = 0;
+		    document.documentElement.scrollTop = 0;
+		},
         checkForm:function(){
         	if(this.name === ''){
 				this.toast = this.$createToast({
@@ -113,16 +118,10 @@ export default {
         	});
         	if(res && res._status == '200'){
         		this.hide();
-        		this.$createDialog({
-			        type: 'alert',
-			        icon: 'cubeic-right',
-			        showClose: true,
-			        title: "提示",
-			        content: "商品将在7个工作日邮寄给您,请到'商品订单记录'中查看物流信息",
-			        onConfirm: () => {
-			        	this.$router.push('/order/Orderlist');
-			        }
-			    }).show();
+        		let _this = this;
+				this.openDialog('success','提交成功',"商品将在7个工作日邮寄给您,请到'商品订单记录'中查看物流信息",function(){
+		    		_this.$router.push('/order/Orderlist');
+		    	});
         	}
         }
     }
@@ -158,7 +157,13 @@ export default {
 			}
 			textarea{
 				font-size: 24px;
+				height: 100px;
+				color: #666;
 				resize: none;
+				width: 100%;
+				border: 1px solid #eee;
+				outline: none;
+				-webkit-appearance: none;
 			}
 		}
 		.btn{
