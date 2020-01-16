@@ -120,6 +120,7 @@ export default {
 
   dl {
     width: 100%;
+    padding 0 $padding-s
 
     dt {
       width: 100%;
