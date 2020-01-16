@@ -88,7 +88,7 @@ export default {
 			display: flex;
 			align-items:center;
 			.set_l{
-				font-size: $size-xs;
+				font-size: $size-s;
 				color: $color-deep;
 				margin-right: 20px;
 			}
@@ -100,7 +100,7 @@ export default {
 					height: 130px;
 					resize: none;
 					outline: none;
-					font-size: $size-xs;
+					font-size: $size-s;
 					color: $color-deep;
 					padding-top: 50px;
 					line-height: 1.5;
