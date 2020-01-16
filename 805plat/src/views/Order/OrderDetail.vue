@@ -3,7 +3,7 @@
     <Xheader title="订单详情" :back="true"></Xheader>
     <Xcont :header="true">
       <div class="img-container">
-        <img :src="goodsdetail.goods_cover">
+        <img :src="goodsdetail.goods_cover" />
       </div>
       <div class="detail-container">
         <div class="info-list">
@@ -28,10 +28,30 @@
             <div class="txt">{{orderdetail.use_num|formatNumberRgx}}</div>
           </div>
           <div class="info-row">
-            <div class="title">手机号码</div>
-            <div class="txt">{{subjoin.receive_phone}}</div>
+            <div class="title">收货人姓名</div>
+
+            <div class="control-container">
+              <input type="text" class="control" v-model="userinfo.id_name" placeholder="请输入收货人姓名" />
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="title">联系电话</div>
+
+            <div class="control-container">
+              <input type="text" class="control" v-model="userinfo.phone" placeholder="请输入手机号码" />
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="title">收货地址</div>
+
+            <div class="control-container">
+              <input class="control" type="text" v-model="userinfo.address" placeholder="请输入收货地址" />
+            </div>
           </div>
         </div>
+      </div>
+      <div class="btn-block" v-show="orderdetail.status=='6'">
+        <cube-button class="btn-primary" :primary="true" @click="debouncesave">去支付</cube-button>
       </div>
     </Xcont>
   </div>
@@ -39,7 +59,9 @@
 <script>
 import Xheader from "@/components/layout/Xheader.vue";
 import Xcont from "@/components/layout/Xcontent.vue";
+import lodash from "lodash";
 import { mapState } from "vuex";
+var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
 const statusobj = {
   "2": { name: "处理中", color: "blue" },
   "3": { name: "失败", color: "red" },
@@ -60,6 +82,7 @@ export default {
       orderdetail: {},
       goodsdetail: {},
       subjoin: {},
+      userinfo: {},
       statuscolor: "",
       statusstr: ""
     };
@@ -76,10 +99,44 @@ export default {
       this.orderdetail = orderdetail.data;
       this.goodsdetail = orderdetail.goods;
       this.subjoin = orderdetail.subjoin;
+      this.userinfo = orderdetail.userinfo;
 
       this.statuscolor = statusobj[orderdetail.data.status].color;
       this.statusstr = statusobj[orderdetail.data.status].name;
-    }
+    },
+    debouncesave: lodash.debounce(async function() {
+      let param = {
+        receive_name: this.userinfo.id_name,
+        receive_phone: this.userinfo.phone,
+        receive_address: this.userinfo.address,
+        order_no: this.orderdetail.order_no,
+        source: this.orderdetail.channel_id,
+        goods_type: this.goodsdetail.goods_type
+      };
+      if (
+        this.userinfo.id_name == "" ||
+        this.userinfo.phone == "" ||
+        this.userinfo.address == ""
+      ) {
+        this.toast = this.$createToast({
+          txt: "请将信息补充完整！",
+          type: "txt"
+        });
+        this.toast.show();
+        return;
+      }
+      if (!myreg.test(this.userinfo.phone)) {
+        this.toast = this.$createToast({
+          txt: "请输入正确的手机号",
+          type: "txt"
+        });
+        this.toast.show();
+        return false;
+      }
+
+      let res = await this.$post(this.$api.convertgoodsExchange, param);
+       this.$router.replace('/order/Orderlist');
+    }, 200)
   },
 
   filters: {
@@ -100,22 +157,23 @@ export default {
 <style lang="stylus" scoped>
 .img-container {
   margin: $padding-l $padding-m;
-  height 50vw;
+  height: 50vw;
   width: $width-content;
   background: #fff;
   border-radius: $size-radius;
-  display flex;
-  justify-content center;
-  align-items center;
-  padding $padding-m
-  img{
-    max-width 100%;
-    max-height 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $padding-m;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
   }
 }
 
 .detail-container {
-  margin: $padding-l $padding-m;
+  margin: $padding-l $padding-m 110px;
   width: $width-content;
   background: #fff;
   border-radius: $size-radius;
@@ -145,11 +203,37 @@ export default {
           color: $color-regular-blue;
         }
       }
+
+      .control-container {
+        flex: 1;
+
+        .control {
+          width: 100%;
+          color: $color-shallow;
+        }
+      }
     }
 
     .info-row:last-child {
       border-bottom: none;
     }
+  }
+}
+
+.btn-block {
+  position: fixed;
+  bottom: $padding-l;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .btn-primary {
+    width: 450px;
+    height: 70px;
+    margin: 0 auto;
+    font-size: 28px;
+    border-radius: 10px;
+    background-image: linear-gradient(#ff704c, #ff3231);
   }
 }
 </style>
