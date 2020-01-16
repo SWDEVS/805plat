@@ -27,27 +27,46 @@
             <div class="title">消耗积分</div>
             <div class="txt">{{orderdetail.use_num|formatNumberRgx}}</div>
           </div>
+          <template  v-if="orderdetail.status=='6'">
           <div class="info-row">
             <div class="title">收货人姓名</div>
 
             <div class="control-container">
-              <input type="text" class="control" v-model="userinfo.id_name" placeholder="请输入收货人姓名" />
+              <input type="text" class="control" v-model="subjoin.receive_name" placeholder="请输入收货人姓名" />
             </div>
           </div>
           <div class="info-row">
             <div class="title">联系电话</div>
 
             <div class="control-container">
-              <input type="text" class="control" v-model="userinfo.phone" placeholder="请输入手机号码" />
+              <input type="text" class="control" v-model="subjoin.receive_phone" placeholder="请输入手机号码" />
             </div>
           </div>
           <div class="info-row">
             <div class="title">收货地址</div>
 
             <div class="control-container">
-              <input class="control" type="text" v-model="userinfo.address" placeholder="请输入收货地址" />
+              <input class="control" type="text" v-model="subjoin.receive_address" placeholder="请输入收货地址" />
             </div>
           </div>
+          </template>
+          <template  v-else>
+          <div class="info-row">
+            <div class="title">收货人姓名</div>
+<div class="txt">{{subjoin.receive_name}}</div>
+       
+          </div>
+          <div class="info-row">
+            <div class="title">联系电话</div>
+<div class="txt">{{subjoin.receive_phone}}</div>
+            
+          </div>
+          <div class="info-row">
+            <div class="title">收货地址</div>
+<div class="txt">{{subjoin.receive_address}}</div>
+           
+          </div>
+          </template>
         </div>
       </div>
       <div class="btn-block" v-show="orderdetail.status=='6'">
@@ -82,7 +101,6 @@ export default {
       orderdetail: {},
       goodsdetail: {},
       subjoin: {},
-      userinfo: {},
       statuscolor: "",
       statusstr: ""
     };
@@ -99,24 +117,23 @@ export default {
       this.orderdetail = orderdetail.data;
       this.goodsdetail = orderdetail.goods;
       this.subjoin = orderdetail.subjoin;
-      this.userinfo = orderdetail.userinfo;
 
       this.statuscolor = statusobj[orderdetail.data.status].color;
       this.statusstr = statusobj[orderdetail.data.status].name;
     },
     debouncesave: lodash.debounce(async function() {
       let param = {
-        receive_name: this.userinfo.id_name,
-        receive_phone: this.userinfo.phone,
-        receive_address: this.userinfo.address,
+        receive_name: this.subjoin.receive_name,
+        receive_phone: this.subjoin.receive_phone,
+        receive_address: this.subjoin.receive_address,
         order_no: this.orderdetail.order_no,
         source: this.orderdetail.channel_id,
         goods_type: this.goodsdetail.goods_type
       };
       if (
-        this.userinfo.id_name == "" ||
-        this.userinfo.phone == "" ||
-        this.userinfo.address == ""
+        this.subjoin.receive_name == "" ||
+        this.subjoin.receive_phone == "" ||
+        this.subjoin.receive_address == ""
       ) {
         this.toast = this.$createToast({
           txt: "请将信息补充完整！",
@@ -125,7 +142,7 @@ export default {
         this.toast.show();
         return;
       }
-      if (!myreg.test(this.userinfo.phone)) {
+      if (!myreg.test(this.subjoin.receive_phone)) {
         this.toast = this.$createToast({
           txt: "请输入正确的手机号",
           type: "txt"
