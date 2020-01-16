@@ -25,26 +25,33 @@
             <div class="head-item">交易状态</div>
             <div class="head-item">时间</div>
           </div>
-          <template v-if="purchaselist.length>0">
-            <div
-              class="list-row"
-              v-for="item in purchaselist"
-              :key="item.order_no"
-              @click="godetail(item.order_no)"
+          <div class="scroll-list-wrap" v-if="purchaselist.length>0">
+            <cube-scroll
+              ref="scroll"
+              @pulling-up="onPullingUp"
+              :data="purchaselist"
+              :options="options"
             >
-              <div class="row-item">
-                <i class="iconfont icon-money"></i>
-                {{item.money|formatmoney}}
-              </div>
-              <div class="row-item">{{item.total_ingot|formatNumberRgx}}</div>
-              <!-- <div class="row-item">{{item.mg_charm|formatNumberRgx}}</div> -->
               <div
-                class="row-item"
-                :class="item.pay_status=='2'?'txt-success':item.pay_status=='3'?'txt-danger':''"
-              >{{item.pay_status|formatstatus}}</div>
-              <div class="row-item">{{item.create_time}}</div>
-            </div>
-          </template>
+                class="list-row"
+                v-for="item in purchaselist"
+                :key="item.order_no"
+                @click="godetail(item.order_no)"
+              >
+                <div class="row-item">
+                  <i class="iconfont icon-money"></i>
+                  {{item.money|formatmoney}}
+                </div>
+                <div class="row-item">{{item.total_ingot|formatNumberRgx}}</div>
+                <!-- <div class="row-item">{{item.mg_charm|formatNumberRgx}}</div> -->
+                <div
+                  class="row-item"
+                  :class="item.pay_status=='2'?'txt-success':item.pay_status=='3'?'txt-danger':''"
+                >{{item.pay_status|formatstatus}}</div>
+                <div class="row-item">{{item.create_time}}</div>
+              </div>
+            </cube-scroll>
+          </div>
           <Empty :tip="tip" v-else></Empty>
         </div>
       </div>
@@ -74,7 +81,19 @@ export default {
     return {
       page: 1,
       tip: "最近暂无充值记录~",
-      purchaselist: []
+      purchaselist: [],
+      options: {
+        pullDownRefresh: false,
+        pullUpLoad: {
+          threshold: 60,
+          // txt: {
+          //   more: "获取更多记录...",
+          //   nomore: "没有更多记录..."
+          // },
+          visible: true
+        },
+        scrollbar: true
+      }
     };
   },
   created() {
@@ -90,14 +109,21 @@ export default {
     purchasehandle() {
       this.$store.dispatch("_showPurchase", true);
     },
-
+    async onPullingUp() {
+      await this.getpurchaselist();
+    },
     async getpurchaselist() {
       let param = {
         page: this.page
       };
       let purchaselist = await this.$get(this.$api.getpurchaselist, param);
-      this.purchaselist = this.purchaselist.concat(purchaselist.pay_list);
-      this.page += 1;
+        if (purchaselist) {
+        this.purchaselist = this.purchaselist.concat(purchaselist.pay_list);
+        this.page += 1;
+      }
+      else{
+        this.$refs.scroll.forceUpdate(false);
+      }
     },
     godetail(orderno) {
       this.$router.push({
@@ -177,6 +203,11 @@ export default {
 .list-container {
   margin: 0 auto;
   padding-bottom: $padding-l;
+
+  .scroll-list-wrap {
+    height: calc(100vh - 620px);
+    overflow: hidden;
+  }
 
   .list-head {
     width: calc(100% - 40px);

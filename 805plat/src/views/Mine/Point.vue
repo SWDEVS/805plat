@@ -42,7 +42,7 @@
                   :data="item.list"
                   :options="options"
                 >
-                  <template>
+                  <div class="list-item-container">
                     <ListItem
                       v-for="(recorditem,index) in item.list"
                       :key="index"
@@ -50,7 +50,7 @@
                       :time="recorditem.add_time"
                       :num="recorditem.ticket"
                     ></ListItem>
-                  </template>
+                  </div>
                 </cube-scroll>
                 <Empty :tip="tip" v-else></Empty>
               </div>
@@ -100,10 +100,10 @@ export default {
       options: {
         pullUpLoad: {
           threshold: 60,
-          txt: {
-            more: "获取更多记录",
-            nomore: "没有更多记录"
-          }
+          // txt: {
+          //   more: "获取更多记录",
+          //   nomore: "没有更多记录"
+          // }
         },
         scrollbar: true
       }
@@ -236,15 +236,20 @@ export default {
 }
 
 .list-container {
-  width: calc(100% - 120px);
+  width: calc(100% - 60px);
   margin: 0 auto;
-  padding-bottom: $padding-l;
+  padding-bottom:0 $padding-s $padding-l;
   height: calc(100vh - 640px);
   overflow-y: hidden;
 
   .scroll-list-wrap {
     height: calc(100vh - 88.889vw);
     overflow: hidden;
+
+    .list-item-container{
+      width calc(100% - 40px);
+      margin 0 auto;
+    }
   }
 }
 </style>

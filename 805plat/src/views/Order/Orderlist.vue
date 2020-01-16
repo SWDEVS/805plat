@@ -21,7 +21,7 @@
                   :data="item.list"
                   :options="options"
                 >
-                  <template>
+                  <div class="list-item-container">
                     <div
                       class="list-item"
                       v-for="order in item.list"
@@ -43,7 +43,7 @@
                         <i class="iconfont icon-arrow-right"></i>
                       </div>
                     </div>
-                  </template>
+                  </div>
                 </cube-scroll>
               </div>
               <Empty :tip="tip" v-else></Empty>
@@ -176,8 +176,8 @@ export default {
     gorewards() {
       this.$router.push({
         name: "Rewards",
-        query:{
-          isjump:1
+        query: {
+          isjump: 1
         }
       });
     }
@@ -197,54 +197,59 @@ export default {
     height: calc(100vh - 30vw);
     overflow: hidden;
 
-    .list-item {
-      width: 100%;
-      height: 110px;
-      display: flex;
-      align-items: center;
-      border-bottom: 1px solid $color-border;
-      font-size: $size-s;
-      color: $color-deep;
+    .list-item-container {
+      width: calc(100% - 40px);
+      margin: 0 auto;
 
-      .item-pic {
-        width: 90px;
-        height: 90px;
-        margin-right: $padding-m;
-
-        img {
-          width: 100%;
-        }
-      }
-
-      .item-detail {
+      .list-item {
+        width: 100%;
+        height: 110px;
         display: flex;
-        flex-direction: column;
-        text-align: left;
-        flex: 1;
-
-        .name {
-          margin-bottom: $padding-s;
-        }
-
-        .point {
-          color: #FF870C;
-          font-size: $size-xs;
-        }
-      }
-
-      .item-status {
-        flex: 1;
-        text-align: right;
+        align-items: center;
+        border-bottom: 1px solid $color-border;
         font-size: $size-s;
-      }
+        color: $color-deep;
 
-      .icon-detail {
-        width: 40px;
-        text-align: right;
+        .item-pic {
+          width: 90px;
+          height: 90px;
+          margin-right: $padding-m;
 
-        .iconfont {
-          color: $color-border;
-          font-size: $size-icon-m;
+          img {
+            width: 100%;
+          }
+        }
+
+        .item-detail {
+          display: flex;
+          flex-direction: column;
+          text-align: left;
+          flex: 1;
+
+          .name {
+            margin-bottom: $padding-s;
+          }
+
+          .point {
+            color: #FF870C;
+            font-size: $size-xs;
+          }
+        }
+
+        .item-status {
+          flex: 1;
+          text-align: right;
+          font-size: $size-s;
+        }
+
+        .icon-detail {
+          width: 40px;
+          text-align: right;
+
+          .iconfont {
+            color: $color-border;
+            font-size: $size-icon-m;
+          }
         }
       }
     }
